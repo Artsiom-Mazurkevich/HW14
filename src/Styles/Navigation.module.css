@@ -1,0 +1,44 @@
+.nav {
+    display: flex;
+    flex-direction: row;
+}
+
+.nav a {
+    text-decoration: none;
+    text-transform: uppercase;
+    color: #ffffff;
+    margin: 0 10px 0 10px;
+    padding: 7px;
+    border-radius: 5px;
+    transition: 0.5s;
+}
+
+
+.nav a.active {
+    color: #0068ff;
+    background-color: #bbd1f1;
+}
+
+.nav a:hover {
+    color: #0068ff;
+    background-color: #bbd1f1;
+    transition: 0.5s;
+}
+
+.link {
+    margin-bottom: 10px;
+    border-radius: 5px;
+    padding: 7px;
+    transition: .5s ease-in;
+}
+
+.link:hover {
+    background-color: #afcaf1;
+    cursor: pointer;
+    transition: .5s ease-in;
+}
+
+
+
+
+
