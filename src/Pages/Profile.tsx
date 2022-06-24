@@ -6,6 +6,7 @@ export const Profile = () => {
         <div className={s.root}>
             <h1>Profile</h1>
             <h1>Sergey</h1>
+            <h1>Artem</h1>
         </div>
     );
 };
