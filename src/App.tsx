@@ -3,7 +3,7 @@ import './App.css';
 import {Route, Routes} from "react-router-dom";
 import {Header} from "./Pages/Header";
 import {Profile} from "./Pages/Profile";
-import {Login} from "./Pages/Login";
+import {Login} from "./Pages/login/Login";
 import {Registration} from "./Pages/Registration";
 import {Test} from "./Pages/Test";
 import {RecoveryPassword} from "./Pages/RecoveryPassword";
