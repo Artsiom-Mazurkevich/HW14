@@ -29,6 +29,7 @@ export const Login = () => {
                 <form onSubmit={formik.handleSubmit}>
                     <FormControl>
                         <FormLabel>
+                            <p style={{textAlign: "center"}}>it-incubator</p>
                             <p style={{textAlign: "center"}}>login</p>
                         </FormLabel>
                         <FormGroup>
@@ -53,10 +54,11 @@ export const Login = () => {
                                                   />}
 
                             />
-                            <Button type={"submit"} variant={"contained"}
-                                    color={"primary"}>
+                            {/*<span className={style.btn}>*/}
+                                <Button type={"submit"} variant={"contained"} color={"primary"} className={style.btn}>
                                 Login
                             </Button>
+                            {/*</span>*/}
                         </FormGroup>
                     </FormControl>
                 </form>
