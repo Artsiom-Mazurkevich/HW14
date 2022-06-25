@@ -12,7 +12,7 @@ import {ErrorPages} from "./Pages/ErrorPages";
 
 function App() {
     return (
-        <div>
+        <div className="wrapper">
             <Header/>
             <div ><Routes>
                 <Route path={"/profile"} element={<Profile/>}></Route>
