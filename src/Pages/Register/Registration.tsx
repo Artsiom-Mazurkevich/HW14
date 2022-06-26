@@ -3,9 +3,14 @@ import {useFormik} from "formik";
 import {FormControl, FormGroup, FormLabel, TextField} from "@mui/material";
 import s from './Registration.module.css'
 import app from '../login/Login.module.css'
+import {useAppDispatch, useAppSelector} from "../../redux/store";
 import {Navigate} from "react-router-dom";
+import {registerTC} from "../../redux/auth-reducer/auth-reducer";
 
 export const Registration = () => {
+
+    const dispatch = useAppDispatch()
+    const isRegistred = useAppSelector(state => state.authReducer.isRegistred)
 
 
     const formik = useFormik({
@@ -15,19 +20,21 @@ export const Registration = () => {
             confirmPassword: ""
         },
         onSubmit: values => {
-            alert(JSON.stringify(values, null, 2));
+            // registerAPI.register(values.email, values.password).then(r => console.log(r))
+            // @ts-ignore
+            dispatch(registerTC(values.email, values.password))
+            // alert(JSON.stringify(values, null, 2));
         },
     });
-
-    /*if(true){
+    if(isRegistred){
         return <Navigate to={"/login"}/>
-    }*/
+    }
 
 
     return (
         <div className={app.wrapper}>
             <div className={s.containerRegister}>
-                <form onSubmit={formik.handleSubmit} className={s.formRegister}>
+                <form className={s.formRegister} onSubmit={formik.handleSubmit}>
                     <FormControl className={s.inputs}>
                         <FormLabel>
                             <p className={s.titleItInc}>it-incubator</p>
