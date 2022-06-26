@@ -10,6 +10,7 @@ import {
     TextField
 } from "@mui/material";
 import {Visibility, VisibilityOff} from "@mui/icons-material";
+import s from "../Register/Registration.module.css";
 
 export const Login = () => {
 
@@ -32,8 +33,8 @@ export const Login = () => {
                 <form onSubmit={formik.handleSubmit} style={{width: '100%'}}>
                     <FormControl style={{width: '90%'}}>
                         <FormLabel>
-                            <p style={{textAlign: "center"}}>it-incubator</p>
-                            <p style={{textAlign: "center"}}>login</p>
+                            <p className={style.titleItInc}>it-incubator</p>
+                            <p className={style.signUp}>login</p>
                         </FormLabel>
                         <FormGroup>
                             <TextField label="Email"
@@ -65,7 +66,7 @@ export const Login = () => {
                             {/*    <Button type={"submit"} variant={"contained"} color={"primary"} className={style.btn}>
                                 Login
                             </Button>*/}
-                            <button type={'submit'}>Login</button>
+                            <button type={'submit'} className={style.btn}>Login</button>
 
                         </FormGroup>
                     </FormControl>
@@ -75,6 +76,7 @@ export const Login = () => {
 
     );
 };
+// 1 студент: создание страницы логинизации: отправить запрос, показать ошибку или перейти на страницу профайла
 
 // <Grid container justifyContent={"center"}>
 {/*<Grid item justifyContent={"center"}>*/

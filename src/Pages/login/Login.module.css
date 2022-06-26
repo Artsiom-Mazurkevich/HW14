@@ -20,6 +20,17 @@
     justify-content: flex-start;
     align-items: center;
 }
+.titleItInc {
+    font-weight: 600;
+    font-size: 26px;
+    color: #2D2E46;
+}
+
+.signUp {
+    font-weight: 600;
+    font-size: 22px;
+    color: #2D2E46;
+}
 
 /*.container{
     display: flex;
