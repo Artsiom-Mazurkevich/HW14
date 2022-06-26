@@ -10,7 +10,7 @@ import {registerTC} from "../../redux/auth-reducer/auth-reducer";
 export const Registration = () => {
 
     const dispatch = useAppDispatch()
-    const isRegistred = useAppSelector(state => state.authReducer.isRegistred)
+    const isRegistered = useAppSelector(state => state.authReducer.isRegistered)
 
 
     const formik = useFormik({
@@ -26,7 +26,7 @@ export const Registration = () => {
             // alert(JSON.stringify(values, null, 2));
         },
     });
-    if(isRegistred){
+    if(isRegistered){
         return <Navigate to={"/login"}/>
     }
 

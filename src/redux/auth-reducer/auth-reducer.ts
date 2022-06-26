@@ -4,14 +4,14 @@ import {AppDispatch} from "../store";
 
 type InitialStateType = {
     email: string
-    isRegistred: boolean
+    isRegistered: boolean
 
 }
 
 
 const initialState: InitialStateType = {
     email: '',
-    isRegistred: false,
+    isRegistered: false,
 }
 
 export const authReducer = (state: InitialStateType = initialState, action: ActionType) => {
@@ -20,7 +20,7 @@ export const authReducer = (state: InitialStateType = initialState, action: Acti
             return {
                 ...state,
                 email: action.payload.email,
-                isRegistred: action.payload.isRegistred
+                isRegistered: action.payload.isRegistered
             }
         }
         default: {
@@ -31,9 +31,9 @@ export const authReducer = (state: InitialStateType = initialState, action: Acti
 
 
 type ActionType = ReturnType<typeof registerAC>
-const registerAC = (email: string, isRegistred: boolean) => ({
+const registerAC = (email: string, isRegistered: boolean) => ({
     type: 'REGISTER',
-    payload: {email, isRegistred}
+    payload: {email, isRegistered: isRegistered}
 } as const)
 
 
