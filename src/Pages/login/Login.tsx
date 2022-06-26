@@ -2,15 +2,13 @@ import React from "react";
 import {useFormik} from "formik";
 import style from "./Login.module.css"
 import {
-    Button,
-    Checkbox,
-    FormControl, FormControlLabel,
+    FormControl,
     FormGroup,
     FormLabel,
     TextField
 } from "@mui/material";
-import {Visibility, VisibilityOff} from "@mui/icons-material";
-import s from "../Register/Registration.module.css";
+import {NavLink} from "react-router-dom";
+
 
 export const Login = () => {
 
@@ -26,15 +24,15 @@ export const Login = () => {
     });
 
 
-
     return (
         <div className={style.wrapper}>
             <div className={style.container}>
-                <form onSubmit={formik.handleSubmit} style={{width: '100%'}}>
-                    <FormControl style={{width: '90%'}}>
+                <form onSubmit={formik.handleSubmit}
+                      className={style.formRegister}>
+                    <FormControl className={style.inputs}>
                         <FormLabel>
                             <p className={style.titleItInc}>it-incubator</p>
-                            <p className={style.signUp}>login</p>
+                            <p className={style.signUp}>Sign Up</p>
                         </FormLabel>
                         <FormGroup>
                             <TextField label="Email"
@@ -50,24 +48,17 @@ export const Login = () => {
                                        variant="standard"
                                        {...formik.getFieldProps("password")}
                             />
-                            {formik.touched.password && formik.errors.password ?
-                                <div
-                                    style={{color: "red"}}>{formik.errors.password}</div> : null}
-                            {/*<FormControlLabel label={"Remember me"}
-                                              name="rememberMe"
-                                              control={
-                                                  <Checkbox {...formik.getFieldProps("rememberMe")}
-                                                            checked={formik.values.rememberMe}
-
-                                                  />}
-
-                            />*/}
-
-                            {/*    <Button type={"submit"} variant={"contained"} color={"primary"} className={style.btn}>
-                                Login
-                            </Button>*/}
-                            <button type={'submit'} className={style.btn}>Login</button>
-
+                            {formik.touched.password && formik.errors.password
+                                ? <div
+                                    style={{color: "red"}}>{formik.errors.password}</div>
+                                : null}
+                            <span className={style.forgot_password}><a href="forgot">Forgot Password</a></span>
+                            <button type={"submit"}
+                                    className={style.btn}>Login
+                            </button>
+                            <span className={style.dont_account}>Dont have an account</span>
+                            <span className={style.linkSignup}><a href="profile">Sign
+                                    up</a></span>
                         </FormGroup>
                     </FormControl>
                 </form>
@@ -78,14 +69,4 @@ export const Login = () => {
 };
 // 1 студент: создание страницы логинизации: отправить запрос, показать ошибку или перейти на страницу профайла
 
-// <Grid container justifyContent={"center"}>
-{/*<Grid item justifyContent={"center"}>*/
-}
 
-// </Grid>
-// </Grid>
-/*<div className={s.root}>
-            <form>
-
-            </form>
-        </div>*/
