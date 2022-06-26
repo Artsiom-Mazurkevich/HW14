@@ -5,9 +5,8 @@
     height: 540px;
     background-color: white;
     border-radius: 8px;
+    text-align: center;
 }
-
-
 
 .inputs, .formRegister {
     width: 100%;
