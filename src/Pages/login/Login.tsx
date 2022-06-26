@@ -9,6 +9,7 @@ import {
     FormLabel,
     TextField
 } from "@mui/material";
+import {Visibility, VisibilityOff} from "@mui/icons-material";
 
 export const Login = () => {
 
@@ -23,11 +24,13 @@ export const Login = () => {
         },
     });
 
+
+
     return (
         <div className={style.wrapper}>
             <div className={style.container}>
-                <form onSubmit={formik.handleSubmit}>
-                    <FormControl>
+                <form onSubmit={formik.handleSubmit} style={{width: '100%'}}>
+                    <FormControl style={{width: '90%'}}>
                         <FormLabel>
                             <p style={{textAlign: "center"}}>it-incubator</p>
                             <p style={{textAlign: "center"}}>login</p>
@@ -36,6 +39,7 @@ export const Login = () => {
                             <TextField label="Email"
                                        margin="normal"
                                        variant="standard"
+                                       fullWidth
                                        {...formik.getFieldProps("email")}/>
                             {formik.touched.email && formik.errors.email ? <div
                                 style={{color: "red"}}>{formik.errors.email}</div> : null}
@@ -48,7 +52,7 @@ export const Login = () => {
                             {formik.touched.password && formik.errors.password ?
                                 <div
                                     style={{color: "red"}}>{formik.errors.password}</div> : null}
-                            <FormControlLabel label={"Remember me"}
+                            {/*<FormControlLabel label={"Remember me"}
                                               name="rememberMe"
                                               control={
                                                   <Checkbox {...formik.getFieldProps("rememberMe")}
@@ -56,11 +60,12 @@ export const Login = () => {
 
                                                   />}
 
-                            />
+                            />*/}
 
-                                <Button type={"submit"} variant={"contained"} color={"primary"} className={style.btn}>
+                            {/*    <Button type={"submit"} variant={"contained"} color={"primary"} className={style.btn}>
                                 Login
-                            </Button>
+                            </Button>*/}
+                            <button type={'submit'}>Login</button>
 
                         </FormGroup>
                     </FormControl>
