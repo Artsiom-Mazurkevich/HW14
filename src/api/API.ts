@@ -1,4 +1,5 @@
 import axios, {AxiosResponse} from "axios";
+import {LoginResponseType} from "../redux/auth-reducer/login-reducer";
 
 
 export type ResponseType = {
@@ -44,29 +45,8 @@ export const registerAPI = {
 
 export const loginApi = {
     login(email: string, password: string, rememberMe: boolean) {
-        return instance.post<{}, AxiosResponse<LoginResponseType>>("/auth/login", {email, password, rememberMe})
+        return instance.post<{}, AxiosResponse<LoginResponseType>>("/auth/login", {email, password,rememberMe})
     },
 }
 
-export type LoginResponseType = {
-    _id: string
-    email: string
-    rememberMe: boolean
-    isAdmin: boolean
-    name: string
-    verified: boolean
-    publicCardPacksCount: number
-    created: string
-    updated: string
-    __v: number
-    token: string
-    tokenDeathTime: number
-    avatar: string
-    deviceTokens: Array<DeviceTokenType>
-}
-type DeviceTokenType = {
-    _id: string
-    device: string
-    token: string
-    tokenDeathTime: number
-}
+

@@ -8,12 +8,15 @@ import {
     TextField
 } from "@mui/material";
 import {useAppDispatch, useAppSelector} from "../../redux/store";
+import {loginTC} from "../../redux/auth-reducer/login-reducer";
 import {Navigate} from "react-router-dom";
 
 
+
 export const Login = () => {
-    const isLogged = useAppSelector(state => state.login.rememberMe)
+
     const dispatch = useAppDispatch()
+    const isAuth = useAppSelector(state=>state.login.isAuth)
 
     const formik = useFormik({
         initialValues: {
@@ -22,11 +25,12 @@ export const Login = () => {
             rememberMe: false
         },
         onSubmit: values => {
-            alert(JSON.stringify(values, null, 2));
+            dispatch(loginTC(values.email, values.password, values.rememberMe));
+            // alert(JSON.stringify(values, null, 2));
         },
     });
 
-    if (isLogged) {
+    if (isAuth) {
         return <Navigate to={"/profile"}/>
     }
 
