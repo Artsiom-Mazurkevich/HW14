@@ -1,12 +1,9 @@
-
-
 .profilePageContainer {
     height: 93vh;
     width: 100vw;
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #282c34;
 }
 
 .contentContainer {
@@ -14,7 +11,7 @@
     width: 80%;
     display: flex;
     justify-content: space-between;
-    background-color: #363b44;
+    /*background-color: #363b44;*/
 }
 
 .profileContainer {
@@ -89,7 +86,7 @@
 .numberOfCardsContainer {
     width: 100%;
     height: 65%;
-    background-color: #363b44;
+    /*background-color: #363b44;*/
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
