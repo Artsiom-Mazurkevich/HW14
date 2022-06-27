@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap');
+
 .containerRegister {
     display: flex;
     padding: 25px 30px 50px 30px;
@@ -13,12 +15,14 @@
 }
 
 .titleItInc {
+    font-family: 'Poppins', sans-serif;
     font-weight: 600;
     font-size: 26px;
     color: #2D2E46;
 }
 
 .signUp {
+    font-family: 'Poppins', sans-serif;
     font-weight: 600;
     font-size: 22px;
     color: #2D2E46;
@@ -28,7 +32,7 @@
     display: flex;
     align-items: center;
     padding-top: 100px;
-    justify-content: space-evenly;
+    justify-content: space-between;
 }
 
 .btnCancel {
@@ -37,9 +41,9 @@
     background-color: #D7D8EF;
     border-radius: 30px;
     border: none;
-    color: #21268F;
+    color: rgba(33, 38, 143, 0.73);
     font-size: 16px;
-    font-weight: 500;
+    font-weight: 600;
 }
 
 .btnRegister {

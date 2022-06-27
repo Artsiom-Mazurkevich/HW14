@@ -1,4 +1,4 @@
-import {AppDispatch, ThunkType} from "../store";
+import {AppDispatch} from "../store";
 import {loginApi} from "../../api/API";
 
 type LoginStateType = {
@@ -61,7 +61,8 @@ export const loginAC = (data:LoginResponseType, isAuth:boolean ) => {
     }as const
 }
 
-export const loginTC = (email: string, password: string, rememberMe: boolean):ThunkType => async dispatch => {
+
+export const loginTC = (email: string, password: string, rememberMe: boolean) => async (dispatch: AppDispatch) => {
     try{
         const response = await loginApi.login(email, password,rememberMe)
         dispatch(loginAC(response.data, true))

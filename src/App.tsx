@@ -11,6 +11,7 @@ import {ForgotPassword} from "./Pages/ForgotPassword";
 import {ErrorPages} from "./Pages/ErrorPages";
 
 function App() {
+
     return (
         <div className="app">
             <div className="content">
