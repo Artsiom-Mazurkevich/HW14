@@ -10,7 +10,7 @@ import {registerTC} from "../../redux/auth-reducer/auth-reducer";
 export const Registration = () => {
 
     const dispatch = useAppDispatch()
-    const isRegistered = useAppSelector(state => state.authReducer.isRegistered)
+    const isRegistered = useAppSelector(state => state.auth.isRegistered)
 
 
     const formik = useFormik({
