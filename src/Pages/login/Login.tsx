@@ -7,10 +7,13 @@ import {
     FormLabel,
     TextField
 } from "@mui/material";
-import {NavLink} from "react-router-dom";
+import {useAppDispatch, useAppSelector} from "../../redux/store";
+import {Navigate} from "react-router-dom";
 
 
 export const Login = () => {
+    const isLogged = useAppSelector(state => state.login.rememberMe)
+    const dispatch = useAppDispatch()
 
     const formik = useFormik({
         initialValues: {
@@ -23,6 +26,9 @@ export const Login = () => {
         },
     });
 
+    if (isLogged) {
+        return <Navigate to={"/profile"}/>
+    }
 
     return (
         <div className={style.wrapper}>
@@ -52,12 +58,14 @@ export const Login = () => {
                                 ? <div
                                     style={{color: "red"}}>{formik.errors.password}</div>
                                 : null}
-                            <span className={style.forgot_password}><a href="forgot">Forgot Password</a></span>
+                            <span className={style.forgot_password}><a
+                                href="forgot">Forgot Password</a></span>
                             <button type={"submit"}
                                     className={style.btn}>Login
                             </button>
                             <span className={style.dont_account}>Dont have an account</span>
-                            <span className={style.linkSignup}><a href="profile">Sign
+                            <span className={style.linkSignup}><a
+                                href="profile">Sign
                                     up</a></span>
                         </FormGroup>
                     </FormControl>
