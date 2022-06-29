@@ -1,5 +1,6 @@
 import axios, {AxiosResponse} from "axios";
 import {LoginResponseType} from "../redux/auth-reducer/login-reducer";
+import {ProfileType} from "../redux/auth-reducer/profile-reducer";
 
 
 export type ResponseType = {
@@ -49,4 +50,9 @@ export const loginApi = {
     },
 }
 
+export const profileAPI = {
+    getProfile() {
+        return instance.post<{}, AxiosResponse<ProfileType>>("/auth/me")
+    },
+}
 

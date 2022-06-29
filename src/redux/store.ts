@@ -3,11 +3,13 @@ import thunkMiddleWare, {ThunkAction, ThunkDispatch} from "redux-thunk";
 import {authReducer} from "./auth-reducer/auth-reducer";
 import {TypedUseSelectorHook, useDispatch, useSelector} from "react-redux";
 import {LoginActionType, loginReducer} from "./auth-reducer/login-reducer";
+import {profileReducer} from "./auth-reducer/profile-reducer";
 
 
 const rootReducer = combineReducers({
     auth: authReducer,
     login: loginReducer,
+    profile: profileReducer,
 })
 
 export const store = legacy_createStore(rootReducer, applyMiddleware(thunkMiddleWare));
