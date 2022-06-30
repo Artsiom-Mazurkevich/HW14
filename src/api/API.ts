@@ -35,7 +35,6 @@ export const instance = axios.create({
 
 export const registerAPI = {
     register(email: string, password: string) {
-        debugger
         return instance.post<{}, AxiosResponse<ResponseType>>("/auth/register", {
             email,
             password
