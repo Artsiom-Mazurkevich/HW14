@@ -5,11 +5,6 @@ import {useSelector} from "react-redux";
 import {RootState, useAppDispatch} from "../redux/store";
 import { TextField } from '@mui/material';
 
-export type NewProfileDataType = {
-    name: string,
-    avatar: string,
-}
-
 export const Profile = () => {
     useEffect(() => {
         dispatch(setProfileTC())
