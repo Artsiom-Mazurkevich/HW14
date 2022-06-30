@@ -12,6 +12,7 @@ import {ErrorPages} from "./Pages/ErrorPages";
 import {PATH} from "./enum/path";
 import {useAppDispatch, useAppSelector} from "./bll/store";
 import {authMe} from "./bll/reducers/app-reducers";
+import {Loader} from "./Components/common/Loader";
 
 function App() {
     const dispatch = useAppDispatch()
@@ -22,7 +23,7 @@ function App() {
     },[])
 
     if(!isInitialized){
-        return <div>jfjhfhfjh</div>
+        return <Loader/>
     }
 
     return (

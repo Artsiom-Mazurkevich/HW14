@@ -1,6 +1,6 @@
 import {ThunkType} from "../store";
 import {authApi} from "../../api/API";
-import {setLoadingStatus} from "./app-reducers";
+import {setError, setLoadingStatus} from "./app-reducers";
 
 type LoginStateType = {
     data: LoginResponseType
@@ -73,6 +73,7 @@ export const loginTC = (email: string, password: string, rememberMe: boolean): T
     } catch (e: any) {
         const error = e.response ? e.response.data.error : (`${e.message}, more details in the console`);
         console.log(error)
+        dispatch(setError(error))
     } finally {
         dispatch(setLoadingStatus("idle"))
     }
