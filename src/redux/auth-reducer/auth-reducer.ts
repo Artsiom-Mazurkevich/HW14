@@ -42,5 +42,6 @@ export const registerTC = (email: string, password: string) => (dispatch: AppDis
         .then(response => {
            dispatch(registerAC(response.data.addedUser.email, true))
         })
-        .catch(response => console.log(response.response.data.error))
+        // .catch(response => console.log(response.response.data.error))
+        .catch(response => alert(response.response.data.error))
 }

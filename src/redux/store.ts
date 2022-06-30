@@ -3,13 +3,11 @@ import thunkMiddleWare, {ThunkAction, ThunkDispatch} from "redux-thunk";
 import {ActionTypeAuthReducer, authReducer} from "./auth-reducer/auth-reducer";
 import {TypedUseSelectorHook, useDispatch, useSelector} from "react-redux";
 import {LoginActionType, loginReducer} from "./auth-reducer/login-reducer";
-import {AppActionType, appReducer} from "./auth-reducer/app-reducer";
 
 
 const rootReducer = combineReducers({
     auth: authReducer,
     login: loginReducer,
-    app: appReducer
 })
 
 export const store = legacy_createStore(rootReducer, applyMiddleware(thunkMiddleWare));
@@ -23,7 +21,7 @@ export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector
 
 
 export type ThunkType<ReturnType = void> = ThunkAction<ReturnType, RootState, unknown, AppRootActionsType>
-export type AppRootActionsType = LoginActionType | AppActionType | ActionTypeAuthReducer
+export type AppRootActionsType = LoginActionType | ActionTypeAuthReducer
 
 // @ts-ignore
 window.store = store;
