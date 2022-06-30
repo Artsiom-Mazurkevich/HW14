@@ -7,8 +7,8 @@ import {
     FormLabel,
     TextField
 } from "@mui/material";
-import {useAppDispatch, useAppSelector} from "../../redux/store";
-import {loginTC} from "../../redux/auth-reducer/login-reducer";
+import {useAppDispatch, useAppSelector} from "../../bll/store";
+import {loginTC} from "../../bll/reducers/login-reducer";
 import {Navigate} from "react-router-dom";
 
 type FormikErrorType = {

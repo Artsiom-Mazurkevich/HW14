@@ -1,5 +1,6 @@
-import {AppDispatch} from "../store";
-import {loginApi} from "../../api/API";
+import {ThunkType} from "../store";
+import {authApi} from "../../api/API";
+import {setLoadingStatus} from "./app-reducers";
 
 type LoginStateType = {
     data: LoginResponseType
@@ -22,17 +23,17 @@ export type LoginResponseType = {
 
 const initialState: LoginStateType = {
     data: {
-        _id: '',
-        email: '',
-        name: '',
-        avatar: '',
+        _id: "",
+        email: "",
+        name: "",
+        avatar: "",
         publicCardPacksCount: 0,
         created: new Date(),
         updated: new Date(),
         isAdmin: false,
         verified: false,
         rememberMe: false,
-        error: ''
+        error: ""
     },
     isAuth: false
 }
@@ -41,8 +42,12 @@ export type LoginActionType = ReturnType<typeof loginAC>
 
 export const loginReducer = (state: LoginStateType = initialState, action: LoginActionType) => {
     switch (action.type) {
-        case "GET-USER": {
-            return {...state, data: action.payload.data, isAuth: action.payload.isAuth}
+        case "login/GET-USER": {
+            return {
+                ...state,
+                data: action.payload.data,
+                isAuth: action.payload.isAuth
+            }
         }
         default: {
             return state
@@ -50,26 +55,26 @@ export const loginReducer = (state: LoginStateType = initialState, action: Login
     }
 }
 
-export const loginAC = (data:LoginResponseType, isAuth:boolean ) => {
+export const loginAC = (data: LoginResponseType, isAuth: boolean) => {
     return {
-        type: "GET-USER",
+        type: "login/GET-USER",
         payload: {
             data,
             isAuth
         }
-    }as const
+    } as const
 }
 
-export const loginTC = (email: string, password: string, rememberMe: boolean) => async (dispatch: AppDispatch) => {
-    try{
-        const response = await loginApi.login(email, password,rememberMe)
+export const loginTC = (email: string, password: string, rememberMe: boolean): ThunkType => async dispatch => {
+    dispatch(setLoadingStatus("loading"))
+    try {
+        const response = await authApi.login(email, password, rememberMe)
         dispatch(loginAC(response.data, true))
-    }
-    catch (e: any) {
+    } catch (e: any) {
         const error = e.response ? e.response.data.error : (`${e.message}, more details in the console`);
         console.log(error)
-    }finally {
-
+    } finally {
+        dispatch(setLoadingStatus("idle"))
     }
 }
 

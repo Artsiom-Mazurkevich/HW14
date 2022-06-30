@@ -1,6 +1,20 @@
-import {registerAPI} from "../../api/API";
-import {AppDispatch} from "../store";
+import {authApi} from "../../api/API";
+import {ThunkType} from "../store";
 
+export type RegistrationResponseType = {
+    addedUser: {
+        _id: string
+        email: string
+        rememberMe: boolean
+        isAdmin: boolean
+        name: string
+        verified: boolean
+        publicCardPacksCount: number
+        created: string
+        updated: string
+        __v: number
+    }
+}
 
 type InitialStateType = {
     email: string
@@ -14,7 +28,7 @@ const initialState: InitialStateType = {
     isRegistered: false,
 }
 
-export const authReducer = (state: InitialStateType = initialState, action: ActionTypeAuthReducer) => {
+export const registrationReducer = (state: InitialStateType = initialState, action: ActionTypeAuthReducer) => {
     switch (action.type) {
         case "REGISTER": {
             return {
@@ -37,8 +51,8 @@ const registerAC = (email: string, isRegistered: boolean) => ({
 } as const)
 
 
-export const registerTC = (email: string, password: string) => (dispatch: AppDispatch) => {
-    registerAPI.register(email, password)
+export const registerTC = (email: string, password: string):ThunkType => (dispatch) => {
+    authApi.register(email, password)
         .then(response => {
            dispatch(registerAC(response.data.addedUser.email, true))
         })
