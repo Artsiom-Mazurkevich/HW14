@@ -1,36 +1,59 @@
-import React, {useEffect} from 'react';
+import React, {ChangeEvent, useEffect, useState} from 'react';
 import s from '../Styles/Profile.module.css'
-import SuperButton from '../Components/SuperButton/SuperButton';
-import {setProfileTC} from "../redux/auth-reducer/profile-reducer";
+import {ProfileStateType, setProfileTC, updateProfileTC} from "../redux/auth-reducer/profile-reducer";
+import {useSelector} from "react-redux";
+import {RootState, useAppDispatch} from "../redux/store";
+import { TextField } from '@mui/material';
+
+export type NewProfileDataType = {
+    name: string,
+    avatar: string,
+}
 
 export const Profile = () => {
-    useEffect(()=> {
-        setProfileTC()
-        debugger
-    }, [])
+    useEffect(() => {
+        dispatch(setProfileTC())
+    });
+    const dispatch = useAppDispatch();
+    const profile = useSelector<RootState, ProfileStateType>(state => state.profile);
+    const [editMode, setEditMode] = useState<boolean>(false);
+    const [newName, setNewName] = useState<string>(profile.profile.name);
 
-    return (
-        <div className={s.profilePageContainer}>
-            <div className={s.contentContainer}>
-                <div className={s.profileContainer}>
-                    <div className={s.profileInfoContainer}>
-                        <div className={s.avatarContainer}>
-                            <div className={s.avatar}></div>
-                        </div>
-                        <div className={s.textContainer}>
-                            <span className={s.name}>props.</span>
-                            <span className={s.description}>I`m a developer</span>
-                            <div className={s.buttonContainer}>
-                                <SuperButton>Edit profile</SuperButton>
-                            </div>
-                        </div>
-                    </div>
-                    <div className={s.numberOfCardsContainer}>
+    const activateEditMode = () => {
+        setEditMode(true);
+    };
+    const disActivateEditMode = () => {
+        setEditMode(false);
+    };
+    const changeTitle = (e: ChangeEvent<HTMLInputElement>) => {
+        setNewName(e.currentTarget.value)
+    };
+    const updateProfileData = (name: string, avatar: string) => {
+        dispatch(updateProfileTC(name, avatar));
+        setEditMode(false);
+    };
 
-                    </div>
+    return !editMode
+    ? <div className={s.profilePageContainer}>
+            <div className={s.profileContainer}>
+                <div className={s.profileInfoContainer}>
+                        <div className={s.avatar}></div>
+                        <span className={s.name}>{profile.profile.name}</span>
+                        <button className={s.btn} onClick={activateEditMode}>Edit profile</button>
+                </div>
+                <div className={s.numberCardsContainer}>
+                    <span className={s.text}>Number of cards</span>
                 </div>
             </div>
         </div>
-    );
+    : <div className={s.editProfilePageContainer}>
+            <div className={s.avatar}></div>
+            <TextField id="standard-helperText" label="Edit your name" defaultValue={profile.profile.name} variant="standard" onChange={changeTitle} />
+            <TextField id="standard-helperText" label="Email" defaultValue={profile.profile.email} variant="standard" disabled/>
+            <div className={s.buttonContainer}>
+                <button className={s.cancelBtn} onClick={disActivateEditMode}>Cancel</button>
+                <button className={s.editBtn} onClick={() => updateProfileData(newName, '')}>Save</button>
+            </div>
+    </div>
 };
 

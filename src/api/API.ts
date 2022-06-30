@@ -1,7 +1,6 @@
 import axios, {AxiosResponse} from "axios";
 import {LoginResponseType} from "../redux/auth-reducer/login-reducer";
-import {ProfileType} from "../redux/auth-reducer/profile-reducer";
-
+import {ProfileType, ResponseUpdateUser} from "../redux/auth-reducer/profile-reducer";
 
 export type ResponseType = {
     addedUser: {
@@ -54,5 +53,8 @@ export const profileAPI = {
     getProfile() {
         return instance.post<{}, AxiosResponse<ProfileType>>("/auth/me")
     },
+    updateProfile(name: string, avatar: string) {
+        return instance.put<{}, AxiosResponse<ResponseUpdateUser>>("/auth/me", {name, avatar})
+    }
 }
 

@@ -6,6 +6,26 @@ export type ProfileStateType = {
     isAuth: boolean
 }
 
+export type ResponseUpdateUser = {
+    token: string
+    tokenDeathTime: number
+    updatedUser: {
+        avatar?: string
+        created: Date
+        email: string
+        isAdmin: false
+        name: string
+        publicCardPacksCount: number
+        rememberMe: boolean
+        token: string
+        tokenDeathTime: number
+        updated: Date
+        verified: boolean
+        __v: number
+        _id: string
+    }
+}
+
 export type ProfileType = {
     _id: string
     email: string
@@ -17,7 +37,6 @@ export type ProfileType = {
     isAdmin: boolean
     verified: boolean
     rememberMe: boolean
-    error?: string
     token: string
     tokenDeathTime: number,
     __v: number,
@@ -35,7 +54,6 @@ const initialState: ProfileStateType = {
         isAdmin: false,
         verified: false,
         rememberMe: false,
-        error: '',
         token: '',
         tokenDeathTime: 0,
         __v: 0,
@@ -66,5 +84,11 @@ export const setProfileTC = () => (dispatch: AppDispatch) => {
     profileAPI.getProfile()
         .then(response => {
             dispatch(setProfileAC(response.data))
+        })
+}
+export const updateProfileTC = (name: string, avatar: string) => (dispatch: AppDispatch) => {
+    profileAPI.updateProfile(name, avatar)
+        .then(response => {
+            dispatch(setProfileAC(response.data.updatedUser))
         })
 }
