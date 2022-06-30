@@ -3,9 +3,9 @@ import {useFormik} from "formik";
 import {FormControl, FormGroup, FormLabel, TextField} from "@mui/material";
 import s from './Registration.module.css'
 import app from '../login/Login.module.css'
-import {useAppDispatch, useAppSelector} from "../../redux/store";
+import {useAppDispatch, useAppSelector} from "../../bll/store";
 import {Navigate} from "react-router-dom";
-import {registerTC} from "../../redux/auth-reducer/auth-reducer";
+import {registerTC} from "../../bll/reducers/registration-reducer";
 
 
 type FormikErrorType = {

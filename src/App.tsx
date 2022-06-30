@@ -1,6 +1,6 @@
-import React from "react";
+import React, {useEffect} from "react";
 import "./App.css";
-import {Route, Routes} from "react-router-dom";
+import {Navigate, Route, Routes} from "react-router-dom";
 import {Header} from "./Pages/header/Header";
 import {Profile} from "./Pages/Profile";
 import {Login} from "./Pages/login/Login";
@@ -9,8 +9,21 @@ import {Test} from "./Pages/Test";
 import {RecoveryPassword} from "./Pages/RecoveryPassword";
 import {ForgotPassword} from "./Pages/ForgotPassword";
 import {ErrorPages} from "./Pages/ErrorPages";
+import {PATH} from "./enum/path";
+import {useAppDispatch, useAppSelector} from "./bll/store";
+import {authMe} from "./bll/reducers/app-reducers";
 
 function App() {
+    const dispatch = useAppDispatch()
+    const isInitialized = useAppSelector(state=>state.app.isInitialized)
+
+    useEffect(()=>{
+    dispatch(authMe())
+    },[])
+
+    if(!isInitialized){
+        return <div>jfjhfhfjh</div>
+    }
 
     return (
         <div className="app">
@@ -18,16 +31,14 @@ function App() {
                 <Header/>
                 <div className="wrapper">
                     <Routes>
-                        <Route path={"/profile"} element={<Profile/>}></Route>
-                        <Route path={"/login"} element={<Login/>}></Route>
-                        <Route path={"/registration"}
-                               element={<Registration/>}></Route>
-                        <Route path={"/test"} element={<Test/>}></Route>
-                        <Route path={"/recovery"}
-                               element={<RecoveryPassword/>}></Route>
-                        <Route path={"/forgot"}
-                               element={<ForgotPassword/>}></Route>
-                        <Route path={"error"} element={<ErrorPages/>}></Route>
+                        {/*<Route path={'/'} element={<Navigate to={PATH.PROFILE}/>}/>*/}
+                        <Route path={PATH.PROFILE} element={<Profile/>}></Route>
+                        <Route path={PATH.PROFILE} element={<Login/>}></Route>
+                        <Route path={PATH.REGISTRATION} element={<Registration/>}></Route>
+                        <Route path={PATH.TEST} element={<Test/>}></Route>
+                        <Route path={PATH.RECOVERY} element={<RecoveryPassword/>}></Route>
+                        <Route path={PATH.FORGOT} element={<ForgotPassword/>}></Route>
+                        <Route path={"/*"} element={<ErrorPages/>}></Route>
                     </Routes>
                 </div>
             </div>

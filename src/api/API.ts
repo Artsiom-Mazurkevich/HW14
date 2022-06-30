@@ -1,21 +1,9 @@
 import axios, {AxiosResponse} from "axios";
-import {LoginResponseType} from "../redux/auth-reducer/login-reducer";
+import {LoginResponseType} from "../bll/reducers/login-reducer";
+import {RegistrationResponseType} from "../bll/reducers/registration-reducer";
 
 
-export type ResponseType = {
-    addedUser: {
-        _id: string
-        email: string
-        rememberMe: boolean
-        isAdmin: boolean
-        name: string
-        verified: boolean
-        publicCardPacksCount: number
-        created: string
-        updated: string
-        __v: number
-    }
-}
+
 
 export type ErrorType = {
     error: string
@@ -28,24 +16,28 @@ export type ErrorType = {
 
 
 export const instance = axios.create({
-    baseURL: process.env.REACT_APP_BACK_URL || "http://localhost:7542/2.0/",
+    // baseURL: process.env.REACT_APP_BACK_URL || "http://localhost:7542/2.0/",
+    baseURL: "http://localhost:7542/2.0",
     withCredentials: true,
 })
 
 
-export const registerAPI = {
+export const authApi = {
     register(email: string, password: string) {
-        return instance.post<{}, AxiosResponse<ResponseType>>("/auth/register", {
+        return instance.post<{}, AxiosResponse<RegistrationResponseType>>("/auth/register", {
             email,
             password
         })
     },
-}
-
-export const loginApi = {
     login(email: string, password: string, rememberMe: boolean) {
         return instance.post<{}, AxiosResponse<LoginResponseType>>("/auth/login", {email, password,rememberMe})
     },
+    authMe(){
+        return instance.post<{}, AxiosResponse<LoginResponseType>>('/auth/me', {})
+    },
+
 }
+
+
 
 
