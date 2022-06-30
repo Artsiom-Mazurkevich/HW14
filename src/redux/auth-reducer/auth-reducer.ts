@@ -14,7 +14,7 @@ const initialState: InitialStateType = {
     isRegistered: false,
 }
 
-export const authReducer = (state: InitialStateType = initialState, action: ActionType) => {
+export const authReducer = (state: InitialStateType = initialState, action: ActionTypeAuthReducer) => {
     switch (action.type) {
         case "REGISTER": {
             return {
@@ -30,7 +30,7 @@ export const authReducer = (state: InitialStateType = initialState, action: Acti
 }
 
 
-type ActionType = ReturnType<typeof registerAC>
+export type ActionTypeAuthReducer = ReturnType<typeof registerAC>
 const registerAC = (email: string, isRegistered: boolean) => ({
     type: 'REGISTER',
     payload: {email, isRegistered: isRegistered}
