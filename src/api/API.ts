@@ -1,8 +1,7 @@
 import axios, {AxiosResponse} from "axios";
 import {LoginResponseType} from "../bll/reducers/login-reducer";
 import {RegistrationResponseType} from "../bll/reducers/registration-reducer";
-import {LoginResponseType} from "../redux/auth-reducer/login-reducer";
-import {ProfileType, ResponseUpdateUser} from "../redux/auth-reducer/profile-reducer";
+import {ProfileType, ResponseUpdateUser} from "../bll/reducers/profile-reducer";
 
 
 
@@ -42,7 +41,7 @@ export const authApi = {
 
 export const profileAPI = {
     getProfile() {
-        return instance.post<{}, AxiosResponse<ProfileType>>("/auth/me")
+        return instance.post<{}, AxiosResponse<ProfileType>>("/auth/me", {})
     },
     updateProfile(name: string, avatar: string) {
         return instance.put<{}, AxiosResponse<ResponseUpdateUser>>("/auth/me", {name, avatar})

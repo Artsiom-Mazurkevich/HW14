@@ -7,12 +7,12 @@ import {
 import {TypedUseSelectorHook, useDispatch, useSelector} from "react-redux";
 import {LoginActionType, loginReducer} from "./reducers/login-reducer";
 import {AppActionType, appReducers} from "./reducers/app-reducers";
-import {profileReducer} from "./auth-reducer/profile-reducer";
+import {ProfileActionType, profileReducer} from "./reducers/profile-reducer";
 
 const rootReducer = combineReducers({
     auth: registrationReducer,
     login: loginReducer,
-    app: appReducers
+    app: appReducers,
     profile: profileReducer,
 })
 
@@ -28,6 +28,7 @@ export type AppRootActionsType =
     LoginActionType
     | ActionTypeAuthReducer
     | AppActionType
+    | ProfileActionType
 
 // @ts-ignore
 window.store = store;

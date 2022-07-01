@@ -1,52 +1,22 @@
 import React, {ChangeEvent, useEffect, useState} from 'react';
 import s from '../Styles/Profile.module.css'
-import SuperButton from '../Components/SuperButton/SuperButton';
-import {useAppSelector} from "../bll/store";
+import {useAppDispatch, useAppSelector} from "../bll/store";
 import {Navigate} from "react-router-dom";
-import {ProfileStateType, setProfileTC, updateProfileTC} from "../redux/auth-reducer/profile-reducer";
-import {useSelector} from "react-redux";
-import {RootState, useAppDispatch} from "../redux/store";
 import {TextField} from '@mui/material';
 import PhotoCameraOutlinedIcon from '@mui/icons-material/PhotoCameraOutlined';
 import userPhoto from '../assets/images/user.png'
+import {setProfileTC, updateProfileTC} from "../bll/reducers/profile-reducer";
 
 export const Profile = () => {
     const isAuth = useAppSelector(state => state.login.isAuth)
-
-    if (!isAuth) {
-        return <Navigate to={"/login/"}/>
-    }
-    return (
-        <div className={s.profilePageContainer}>
-            <div className={s.contentContainer}>
-                <div className={s.profileContainer}>
-                    <div className={s.profileInfoContainer}>
-                        <div className={s.avatarContainer}>
-                            <div className={s.avatar}></div>
-                        </div>
-                        <div className={s.textContainer}>
-                            <span className={s.name}>Ivanov Ivan</span>
-                            <span className={s.description}>I`m a developer</span>
-                            <div className={s.buttonContainer}>
-                                <SuperButton>Edit profile</SuperButton>
-                            </div>
-                        </div>
-                    </div>
-                    <div className={s.numberOfCardsContainer}>
-
-                    </div>
-                </div>
-            </div>
-        </div>
-    );
+    const dispatch = useAppDispatch();
     useEffect(() => {
         dispatch(setProfileTC())
-    });
-    const dispatch = useAppDispatch();
-    const profile = useSelector<RootState, ProfileStateType>(state => state.profile);
-    const avatar = profile.profile.avatar ? profile.profile.avatar : userPhoto
+    }, []);
+    const profile = useAppSelector(state => state.profile.data);
+    const avatar = profile.avatar ? profile.avatar : userPhoto;
     const [editMode, setEditMode] = useState<boolean>(false);
-    const [newName, setNewName] = useState<string>(profile.profile.name);
+    const [newName, setNewName] = useState<string>(profile.name);
     const [newAvatar, setNewAvatar] = useState<string>(avatar);
 
     const activateEditMode = () => {
@@ -70,6 +40,10 @@ export const Profile = () => {
         setEditMode(false);
     };
 
+    if (!isAuth) {
+        return <Navigate to={"/login/"}/>
+    }
+
     return !editMode
         ? <div className={s.profilePageContainer}>
             <div className={s.profileContainer}>
@@ -78,7 +52,7 @@ export const Profile = () => {
                     <img src={avatar != null ? avatar : userPhoto}
                          className={s.avatar}
                          alt='avatar'/>
-                    <span className={s.name}>{profile.profile.name}</span>
+                    <span className={s.name}>{profile.name}</span>
                     <button className={s.btn} onClick={activateEditMode}>Edit profile</button>
                 </div>
                 <div className={s.numberCardsContainer}>
@@ -107,9 +81,9 @@ export const Profile = () => {
                 </div>
 
                 <div className={s.editInputsContainer}>
-                    <TextField id="standard-helperText" label="Edit your name" defaultValue={profile.profile.name}
+                    <TextField id="standard-helperText" label="Edit your name" defaultValue={profile.name}
                                variant="standard" onChange={changeTitle}/>
-                    <TextField id="standard-helperText" label="Email" defaultValue={profile.profile.email}
+                    <TextField id="standard-helperText" label="Email" defaultValue={profile.email}
                                variant="standard" disabled/>
                 </div>
                 <div className={s.editButtonsContainer}>

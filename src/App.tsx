@@ -11,7 +11,7 @@ import {ForgotPassword} from "./Pages/ForgotPassword";
 import {ErrorPages} from "./Pages/ErrorPages";
 import {PATH} from "./enum/path";
 import {useAppDispatch, useAppSelector} from "./bll/store";
-import {authMe} from "./bll/reducers/app-reducers";
+import {authMeTC} from "./bll/reducers/app-reducers";
 import {Loader} from "./Components/common/loader/Loader";
 import {ErrorSnackbar} from "./Components/common/errorBar/ErrorBar";
 
@@ -20,7 +20,7 @@ function App() {
     const isInitialized = useAppSelector(state=>state.app.isInitialized)
 
     useEffect(()=>{
-    dispatch(authMe())
+    dispatch(authMeTC())
     },[])
 
     if(!isInitialized){
@@ -34,7 +34,7 @@ function App() {
                 <Header/>
                 <div className="wrapper">
                     <Routes>
-                        {/*<Route path={'/'} element={<Navigate to={PATH.PROFILE}/>}/>*/}
+                        <Route path={'/'} element={<Navigate to={PATH.PROFILE}/>}/>
                         <Route path={PATH.PROFILE} element={<Profile/>}></Route>
                         <Route path={PATH.LOGIN} element={<Login/>}></Route>
                         <Route path={PATH.REGISTRATION} element={<Registration/>}></Route>

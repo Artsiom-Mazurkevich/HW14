@@ -1,8 +1,8 @@
 import {profileAPI} from "../../api/API";
-import {AppDispatch} from "../store";
+import {ThunkType} from "../store";
 
 export type ProfileStateType = {
-    profile: ProfileType
+    data: ProfileType
     isAuth: boolean
 }
 
@@ -43,7 +43,7 @@ export type ProfileType = {
 }
 
 const initialState: ProfileStateType = {
-    profile: {
+    data: {
         _id: '',
         email: '',
         name: '',
@@ -61,12 +61,12 @@ const initialState: ProfileStateType = {
     isAuth: false
 }
 
-export const profileReducer = (state: ProfileStateType = initialState, action: ActionType) => {
+export const profileReducer = (state: ProfileStateType = initialState, action: ProfileActionType) => {
     switch (action.type) {
         case 'SET-PROFILE': {
             return {
                 ...state,
-                profile: action.profile
+                data: action.profile
             }
         }
         default: {
@@ -76,17 +76,20 @@ export const profileReducer = (state: ProfileStateType = initialState, action: A
 }
 
 
-type ActionType = ReturnType<typeof setProfileAC>
+export type ProfileActionType = ReturnType<typeof setProfileAC>
 
 export const setProfileAC = (profile: ProfileType) => ({type: 'SET-PROFILE', profile} as const);
 
-export const setProfileTC = () => (dispatch: AppDispatch) => {
+export const setProfileTC = ():ThunkType => dispatch => {
     profileAPI.getProfile()
         .then(response => {
             dispatch(setProfileAC(response.data))
         })
+        .catch(error => {
+            alert(error)
+        })
 }
-export const updateProfileTC = (name: string, avatar: string) => (dispatch: AppDispatch) => {
+export const updateProfileTC = (name: string, avatar: string):ThunkType => dispatch => {
     profileAPI.updateProfile(name, avatar)
         .then(response => {
             dispatch(setProfileAC(response.data.updatedUser))

@@ -55,7 +55,7 @@ export const setError = (error: string | null) => {
     } as const
 }
 
-export const authMe = ():ThunkType => async dispatch =>{
+export const authMeTC = ():ThunkType => async dispatch =>{
         dispatch(setLoadingStatus("loading"))
     try{
         const response = await authApi.authMe()
