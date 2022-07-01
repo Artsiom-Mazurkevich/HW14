@@ -1,8 +1,15 @@
 import React from 'react';
 import s from '../Styles/Profile.module.css'
 import SuperButton from '../Components/SuperButton/SuperButton';
+import {useAppSelector} from "../bll/store";
+import {Navigate} from "react-router-dom";
 
 export const Profile = () => {
+    const isAuth = useAppSelector(state => state.login.isAuth)
+
+    if (!isAuth) {
+        return <Navigate to={"/login/"}/>
+    }
     return (
         <div className={s.profilePageContainer}>
             <div className={s.contentContainer}>

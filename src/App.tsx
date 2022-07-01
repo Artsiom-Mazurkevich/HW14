@@ -12,7 +12,8 @@ import {ErrorPages} from "./Pages/ErrorPages";
 import {PATH} from "./enum/path";
 import {useAppDispatch, useAppSelector} from "./bll/store";
 import {authMe} from "./bll/reducers/app-reducers";
-import {Loader} from "./Components/common/Loader";
+import {Loader} from "./Components/common/loader/Loader";
+import {ErrorSnackbar} from "./Components/common/errorBar/ErrorBar";
 
 function App() {
     const dispatch = useAppDispatch()
@@ -28,18 +29,19 @@ function App() {
 
     return (
         <div className="app">
+            <ErrorSnackbar/>
             <div className="content">
                 <Header/>
                 <div className="wrapper">
                     <Routes>
                         {/*<Route path={'/'} element={<Navigate to={PATH.PROFILE}/>}/>*/}
                         <Route path={PATH.PROFILE} element={<Profile/>}></Route>
-                        <Route path={PATH.PROFILE} element={<Login/>}></Route>
+                        <Route path={PATH.LOGIN} element={<Login/>}></Route>
                         <Route path={PATH.REGISTRATION} element={<Registration/>}></Route>
                         <Route path={PATH.TEST} element={<Test/>}></Route>
                         <Route path={PATH.RECOVERY} element={<RecoveryPassword/>}></Route>
                         <Route path={PATH.FORGOT} element={<ForgotPassword/>}></Route>
-                        <Route path={"/*"} element={<ErrorPages/>}></Route>
+                        {/*<Route path={"/*"} element={<ErrorPages/>}></Route>*/}
                     </Routes>
                 </div>
             </div>
