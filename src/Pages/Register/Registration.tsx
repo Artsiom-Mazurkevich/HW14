@@ -28,7 +28,6 @@ export const Registration = () => {
     const dispatch = useAppDispatch()
     const isRegistered = useAppSelector(state => state.auth.isRegistered)
 
-
     const formik = useFormik({
         initialValues: {
             email: "",
@@ -64,7 +63,6 @@ export const Registration = () => {
     if (isRegistered) {
         return <Navigate to={"/login"}/>
     }
-
 
     return (
         <div className={app.wrapper}>
