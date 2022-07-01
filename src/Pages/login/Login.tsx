@@ -7,16 +7,28 @@ import {
     FormLabel,
     TextField
 } from "@mui/material";
-import {useAppDispatch, useAppSelector} from "../../redux/store";
-import {loginTC} from "../../redux/auth-reducer/login-reducer";
+import {useAppDispatch, useAppSelector} from "../../bll/store";
+import {loginTC} from "../../bll/reducers/login-reducer";
 import {Navigate} from "react-router-dom";
 
-
+type FormikErrorType = {
+    email?: string
+    password?: string
+}
 
 export const Login = () => {
+    const divError = (top: string) => ({
+        width: "100%",
+        color: "red",
+        position: "absolute",
+        right: "0px",
+        fontSize: "16px",
+        top: `${top}px`,
+    } as {})
 
     const dispatch = useAppDispatch()
-    const isAuth = useAppSelector(state=>state.login.isAuth)
+    const isAuth = useAppSelector(state => state.login.isAuth)
+    const isRegistered = useAppSelector(state => state.auth.isRegistered)
 
     const formik = useFormik({
         initialValues: {
@@ -24,14 +36,30 @@ export const Login = () => {
             password: "",
             rememberMe: false
         },
+        validate: (values) => {
+            const errors: FormikErrorType = {};
+            if (!values.email) {
+                errors.email = "Required";
+            } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
+                errors.email = "Invalid email address";
+            }
+            if (!values.password) {
+                errors.password = "Required";
+            } else if (values.password.length < 7) {
+                errors.password = "password should be at least seven symbols";
+            }
+            return errors;
+        },
         onSubmit: values => {
             dispatch(loginTC(values.email, values.password, values.rememberMe));
             // alert(JSON.stringify(values, null, 2));
         },
     });
-
+    if (!isRegistered) {
+        return <Navigate to={"/registration/"}/>
+    }
     if (isAuth) {
-        return <Navigate to={"/profile"}/>
+        return <Navigate to={"/profile/"}/>
     }
 
     return (
@@ -50,8 +78,7 @@ export const Login = () => {
                                        variant="standard"
                                        fullWidth
                                        {...formik.getFieldProps("email")}/>
-                            {formik.touched.email && formik.errors.email ? <div
-                                style={{color: "red"}}>{formik.errors.email}</div> : null}
+                            {formik.touched.email && formik.errors.email ? <div style={divError('184')}>{formik.errors.email}</div> : null}
                             <TextField type="password"
                                        label="Password"
                                        margin="normal"
@@ -60,7 +87,7 @@ export const Login = () => {
                             />
                             {formik.touched.password && formik.errors.password
                                 ? <div
-                                    style={{color: "red"}}>{formik.errors.password}</div>
+                                    style={divError('255')}>{formik.errors.password}</div>
                                 : null}
                             <span className={style.forgot_password}><a
                                 href="forgot">Forgot Password</a></span>
