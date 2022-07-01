@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {ChangeEvent, useEffect, useState} from 'react';
 import s from '../Styles/Profile.module.css'
 import {ProfileStateType, setProfileTC, updateProfileTC} from "../redux/auth-reducer/profile-reducer";
 import {useSelector} from "react-redux";
