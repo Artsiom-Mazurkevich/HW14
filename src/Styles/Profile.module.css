@@ -1,93 +1,209 @@
 .profilePageContainer {
-    height: 93vh;
-    width: 100vw;
+    width: 80vw;
+    height: 80vh;
+    margin: 10vh 10vw;
     display: flex;
     align-items: center;
     justify-content: center;
-}
-
-.contentContainer {
-    height: 90%;
-    width: 80%;
-    display: flex;
-    justify-content: space-between;
-    /*background-color: #363b44;*/
+    border-radius: 20px;
 }
 
 .profileContainer {
+    width: 40%;
     height: 100%;
-    width: 25%;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
+    border-radius: 20px;
+    background-color: #ECECF9;
+
 }
 
 .profileInfoContainer {
     width: 100%;
-    height: 35%;
-    padding: 5% 0;
+    height: 45%;
     display: flex;
     flex-direction: column;
-    background-color: #454a56;
-}
-
-.avatarContainer {
-    width: 100%;
-    height: 55%;
-    display: flex;
-    justify-content: center;
+    justify-content: space-around;
     align-items: center;
+    border-radius: 20px;
+    background-color: #D9D9F1;
 }
 
 .avatar {
-    width: 130px;
-    height: 130px;
+    width: 170px;
+    height: 170px;
     border-radius: 50%;
     background-color: #afcaf1;
 }
 
-.textContainer {
-    width: 100%;
-    height: 45%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-}
-
 .name {
     width: 100%;
-    height: 30%;
     display: flex;
     justify-content: center;
     align-items: center;
-    color: white;
+    color: #1D1D1D;
     text-transform: uppercase;
     font-size: x-large;
 }
 
-.description {
-    width: 100%;
-    height: 30%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: white;
-    font-size: large;
+.btn {
+    height: 36px;
+    width: 120px;
+    border-radius: 5px;
+    border: 2px solid #bdbdbd;
+    color: #0d2ca6;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    background-color: #cad2de;
 }
 
-.buttonContainer {
-    width: 100%;
-    height: 30%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.numberOfCardsContainer {
-    width: 100%;
-    height: 65%;
-    /*background-color: #363b44;*/
+.editProfilePageContainer {
+    width: 32vw;
+    height: 80vh;
+    margin: 10vh auto;
+    padding: 20px 0 40px;
     display: flex;
     flex-direction: column;
+    align-items: center;
     justify-content: flex-start;
+    background-color: #fff;
+    border-radius: 20px;
+}
+
+.editTitle {
+    height: 35px;
+    font-weight: 600;
+    font-size: 32px;
+    line-height: 35px;
+    color: #1D1D1D;
+}
+
+.editContentContainer {
+    width: 100%;
+    height: 100%;
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.editAvatarContainer {
+    width: 170px;
+    height: 170px;
+    position: relative;
+}
+
+.editAvatar {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background-color: #afcaf1;
+}
+
+.editAvatarBtnContainer {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    /*border: 2px solid #FFF;
+    background-color: rgba(45, 46, 70, 0.5);*/
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.editAvatarBtn {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    position: relative;
+}
+
+.inputFile {
+    opacity: 0;
+    visibility: hidden;
+    position: absolute;
+}
+
+.labelInput {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid #FFF;
+    background-color: rgba(45, 46, 70, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.editInputsContainer {
+    width: 100%;
+    height: 40%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.editButtonsContainer {
+    width: 100%;
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.editSaveBtn {
+    height: 36px;
+    width: 150px;
+    border-radius: 30px;
+    margin: 40px auto 0;
+    border: none;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    background-color: #21268F;
+    box-shadow: 0 4px 18px rgba(33, 38, 143, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.editCancelBtn {
+    height: 36px;
+    width: 150px;
+    border-radius: 30px;
+    margin: 40px auto 0;
+    border: none;
+    color: #21268F;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    background-color: #D7D8EF;
+    box-shadow: 0 4px 18px rgba(33, 38, 143, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.numberCardsContainer {
+    width: 100%;
+    height: 55%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    border-radius: 20px;
+
+}
+
+.text {
+    width: 200px;
+    height: 26px;
+    font-size: 24px;
+    line-height: 26px;
+    font-weight: 700;
+    margin: 30px auto 30px 30px;
+    color: #1D1D1D;
 }
