@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 import {useAppDispatch, useAppSelector} from "../../bll/store";
 import {loginTC} from "../../bll/reducers/login-reducer";
+import {Navigate} from "react-router-dom";
 
 type FormikErrorType = {
     email?: string
@@ -54,12 +55,10 @@ export const Login = () => {
             // alert(JSON.stringify(values, null, 2));
         },
     });
-    /*if (!isRegistered) {
-        return <Navigate to={"/registration/"}/>
 
     if (isAuth) {
         return <Navigate to={"/profile/"}/>
-    }}*/
+    }
 
     return (
         <div className={style.wrapper}>
