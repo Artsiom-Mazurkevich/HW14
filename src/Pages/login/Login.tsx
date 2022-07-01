@@ -28,6 +28,7 @@ export const Login = () => {
 
     const dispatch = useAppDispatch()
     const isAuth = useAppSelector(state => state.login.isAuth)
+    const isRegistered = useAppSelector(state => state.auth.isRegistered)
 
     const formik = useFormik({
         initialValues: {
@@ -54,9 +55,11 @@ export const Login = () => {
             // alert(JSON.stringify(values, null, 2));
         },
     });
-
+    if (!isRegistered) {
+        return <Navigate to={"/registration/"}/>
+    }
     if (isAuth) {
-        return <Navigate to={"/profile"}/>
+        return <Navigate to={"/profile/"}/>
     }
 
     return (
