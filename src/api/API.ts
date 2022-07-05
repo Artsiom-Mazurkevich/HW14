@@ -49,4 +49,14 @@ export const profileAPI = {
 }
 
 
+export const cardsAPI = {
+    getCards () {
+        return instance.get(`cards/pack?pageCount=7`)
+    },
+    filterCountCards (min: number, max: number, page: number = 1) {
+        return instance.get(`cards/pack?pageCount=7&min=${min}&max=${max}&page=${page}`)
+    }
+}
+
+
 
