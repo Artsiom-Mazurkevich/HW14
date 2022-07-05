@@ -1,6 +1,6 @@
 .mainBlockPacksList {
     width: 1200px;
-    height: 700px;
+    min-height: 700px;
     margin: 150px auto;
     display: flex;
     background-color: #FEFEFF;
