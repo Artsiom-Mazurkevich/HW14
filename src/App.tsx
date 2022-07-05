@@ -14,6 +14,7 @@ import {useAppDispatch, useAppSelector} from "./bll/store";
 import {authMeTC} from "./bll/reducers/app-reducers";
 import {Loader} from "./Components/common/loader/Loader";
 import {ErrorSnackbar} from "./Components/common/errorBar/ErrorBar";
+import {PacksList} from "./Pages/Packs_List/PacksList";
 
 function App() {
     const dispatch = useAppDispatch()
