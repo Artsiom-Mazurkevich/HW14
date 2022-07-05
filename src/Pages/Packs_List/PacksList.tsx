@@ -1,4 +1,4 @@
-import React, {ChangeEvent, useEffect} from 'react';
+import React, {ChangeEvent, FormEvent, MouseEventHandler, useEffect} from 'react';
 import s from './packsList.module.css'
 import {
     Button,
@@ -22,7 +22,7 @@ import {
 } from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
 import {useAppDispatch, useAppSelector} from "../../bll/store";
-import {filterCardsTC, getCardsTC} from "./packsList-reducer";
+import {changePage, createNewCardTC, getCardsTC} from "./packsList-reducer";
 import {useDebounce} from "./hook/useDebounce";
 
 
@@ -73,49 +73,52 @@ const StyledTableRow = styled(TableRow)(({theme}) => ({
 
 export const PacksList = () => {
 
-    useEffect(() => {
-        dispatch(getCardsTC())
-    },[])
     const dispatch = useAppDispatch()
 
 
     const arrayCards = useAppSelector(state => state.packsList.cardPacks)
-    let [minCards, maxCards] = useAppSelector(state => ([state.packsList.minCardsCount, state.packsList.maxCardsCount]))
-    let cardPacksTotalCount = useAppSelector(state => Math.ceil(state.packsList.cardPacksTotalCount / state.packsList.pageCount))
+    const cardPacksPageCount = useAppSelector(state => Math.ceil(state.packsList.cardPacksTotalCount / state.packsList.pageCount))
     const currentPage = useAppSelector(state => state.packsList.page)
 
 
 
 
+    const [valueSearchField, setValueSearchField] = React.useState('')
+    const onChangeSearchInput = (e: ChangeEvent<HTMLInputElement>) => {
+      setValueSearchField(e.currentTarget.value)
+    }
 
-    const [value, setValue] = React.useState<number[]>([minCards, maxCards]);
-    const [debounceMin, debounceMax] = useDebounce(value, 800)
-    const handleChange = (event: Event, newValue: number | number[], activeThumb: number) => {
-        setValue(newValue as number[]);
+
+
+
+    const [valueSlider, setValueSlider] = React.useState<number[]>([0, 110]);
+    const [debounceMin, debounceMax] = useDebounce(valueSlider, 800)
+    const handleChangeRangeSlider = (event: Event, newValue: number | number[]) => {
+        setValueSlider(newValue as number[]);
     };
-    useEffect(() => {
-        dispatch(filterCardsTC(debounceMin, debounceMax))
-    }, [debounceMin, debounceMax])
 
 
 
 
 
-    const [age, setAge] = React.useState('7');
+
+    const [pageCount, setPageCount] = React.useState('7');
     const handleChangeSelect = (event: SelectChangeEvent) => {
-        setAge(event.target.value as string);
+        setPageCount(event.target.value as string);
     };
-
-
 
 
 
     const onChangePageCards = (event: React.ChangeEvent<unknown>, page: number) => {
-        dispatch(filterCardsTC(debounceMin, debounceMax, page))
+        dispatch(changePage(page))
     }
 
 
-    console.log(value)
+    useEffect(() => {
+        dispatch(getCardsTC(pageCount, currentPage, debounceMin, debounceMax))
+    }, [pageCount, currentPage, debounceMin, debounceMax, dispatch])
+
+
 
     return (
         <div className={s.mainBlockPacksList}>
@@ -131,10 +134,10 @@ export const PacksList = () => {
                 <div className={s.sliderCards}>
                     <Slider
                         getAriaLabel={() => 'Count cards'}
-                        value={value}
-                        min={minCards}
-                        max={maxCards}
-                        onChange={handleChange}
+                        value={valueSlider}
+                        // min={minCards}
+                        // max={maxCards}
+                        onChange={handleChangeRangeSlider}
                         valueLabelDisplay="on"
                         color="secondary"
                     />
@@ -144,13 +147,15 @@ export const PacksList = () => {
                 <div className={s.titlePacksList}>Packs List</div>
                 <div className={s.searchFieldWithButton}>
                     <Paper
-                        component="form"
+                        component="div"
                         sx={{p: '2px 4px', display: 'flex', alignItems: 'center', width: 500}}
                     >
                         <IconButton type="submit" sx={{p: '10px'}} aria-label="search">
                             <SearchIcon/>
                         </IconButton>
                         <InputBase
+                            value={valueSearchField}
+                            onChange={onChangeSearchInput}
                             sx={{ml: 1, flex: 1}}
                             placeholder="Search"
                             inputProps={{'aria-label': 'search'}}
@@ -187,15 +192,21 @@ export const PacksList = () => {
                     </TableContainer>
                 </div>
                 <div className={s.pagination}>
-                    <Pagination page={currentPage} count={cardPacksTotalCount} shape="rounded" color={'secondary'} onChange={onChangePageCards}/>
+                    <Pagination
+                        page={currentPage}
+                        count={cardPacksPageCount}
+                        shape="rounded"
+                        color={'secondary'}
+                        onChange={onChangePageCards}
+                    />
                     <div style={{margin: '0 30px'}}>
                         Show
                         <Select
                             sx={{width: '66px', height: '30px', padding: '0', margin: '0 10px'}}
                             labelId="demo-simple-select-label"
                             id="demo-simple-select"
-                            value={age}
-                            label="Age"
+                            value={pageCount}
+                            label="count"
                             onChange={handleChangeSelect}
                         >
                             <MenuItem value={7}>7</MenuItem>

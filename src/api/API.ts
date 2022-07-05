@@ -50,12 +50,42 @@ export const profileAPI = {
 
 
 export const cardsAPI = {
-    getCards () {
+
+    //=======================1========================
+    /*getCards () {
         return instance.get(`cards/pack?pageCount=7`)
     },
     filterCountCards (min: number, max: number, page: number = 1) {
         return instance.get(`cards/pack?pageCount=7&min=${min}&max=${max}&page=${page}`)
+    },*/
+    //=======================1========================
+
+
+    //================2====================
+   /* getCards () {
+        return instance.get(`cards/pack`)
+    },
+
+    changeCountPacksOnPage (pageCount: string) {
+        return instance.get(`cards/pack?pageCount=${pageCount}`)
+    },
+    set_MinMax_Cards (value: Array<number>) {
+        return instance.get(`cards/pack?min=${value[0]}&max=${value[1]}`)
+    }*/
+    //================2====================
+
+
+
+    //========================3==========================
+    getTestCards (cardsCountOnPage: string, currentPage: number, min:number, max: number) {
+        //return instance.get(`cards/pack?pageCount=${cardsCountOnPage}&page=${currentPage}&min=${min}&max=${max}`)
+        return instance.get(`cards/pack`, {params:{pageCount: cardsCountOnPage, page: currentPage, min, max}})
+    },
+    createCard (name: string, deckCover: string, isPrivate: boolean) {
+      return instance.post(`cards/pack`, {cardsPack: {name, deckCover, private: isPrivate}})
     }
+    //========================3==========================
+
 }
 
 

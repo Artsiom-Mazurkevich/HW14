@@ -20,13 +20,13 @@ function App() {
     const dispatch = useAppDispatch()
     const isInitialized = useAppSelector(state=>state.app.isInitialized)
 
-    useEffect(()=>{
+    /*useEffect(()=>{
     dispatch(authMeTC())
-    },[])
+    },[])*/
 
-    if(!isInitialized){
+   /* if(!isInitialized){
         return <Loader/>
-    }
+    }*/
 
     return (
         <div className="app">
