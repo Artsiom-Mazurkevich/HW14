@@ -1,8 +1,9 @@
-import React, {ChangeEvent, FormEvent, MouseEventHandler, useEffect} from 'react';
+import React, {ChangeEvent, useEffect} from 'react';
 import s from './packsList.module.css'
 import {
     Button,
-    ButtonGroup,
+    Fab,
+    fabClasses,
     IconButton,
     InputBase,
     MenuItem,
@@ -21,9 +22,13 @@ import {
     TableRow
 } from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
-import {useAppDispatch, useAppSelector} from "../../bll/store";
-import {changePage, createNewCardTC, getCardsTC} from "./packsList-reducer";
+import {store, useAppDispatch, useAppSelector} from "../../bll/store";
+import {changePage, deleteCardsPackTC, getCardsTC, sortPacksByDate} from "./packsList-reducer";
 import {useDebounce} from "./hook/useDebounce";
+import AddCardIcon from '@mui/icons-material/AddCard';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+import MenuBookIcon from '@mui/icons-material/MenuBook';
 
 
 const StyledTableCell = styled(TableCell)(({theme}) => ({
@@ -49,6 +54,7 @@ const StyledTableRow = styled(TableRow)(({theme}) => ({
         border: 0,
     },
 }));
+
 
 /*function createData(
     name: string,
@@ -79,16 +85,42 @@ export const PacksList = () => {
     const arrayCards = useAppSelector(state => state.packsList.cardPacks)
     const cardPacksPageCount = useAppSelector(state => Math.ceil(state.packsList.cardPacksTotalCount / state.packsList.pageCount))
     const currentPage = useAppSelector(state => state.packsList.page)
+    const sortPacks = useAppSelector(state => state.packsList.sortPacks)
+    const user_id = useAppSelector(state => state.login.data._id)
+    const max = useAppSelector(state => state.packsList.maxCardsCount)
+    console.log(user_id)
+    console.log(arrayCards.map(u => u.user_id))
+    // console.log(store.getState())
 
 
 
 
-    const [valueSearchField, setValueSearchField] = React.useState('')
-    const onChangeSearchInput = (e: ChangeEvent<HTMLInputElement>) => {
-      setValueSearchField(e.currentTarget.value)
+
+    
+    const deletePack = (idPack: string) => {
+      dispatch(deleteCardsPackTC(idPack))
+    }
+    
+
+
+
+
+    const [id, setId] = React.useState<string>('')
+
+
+    const sortPacksHandler = () => {
+        return sortPacks === '0updated'
+            ? dispatch(sortPacksByDate('1updated'))
+            : dispatch(sortPacksByDate('0updated'))
     }
 
 
+    const [valueSearchField, setValueSearchField] = React.useState('')
+    const debouncedValueSearchField = useDebounce<string>(valueSearchField, 600)
+
+    const onChangeSearchInput = (e: ChangeEvent<HTMLInputElement>) => {
+        setValueSearchField(e.currentTarget.value);
+    }
 
 
     const [valueSlider, setValueSlider] = React.useState<number[]>([0, 110]);
@@ -98,15 +130,10 @@ export const PacksList = () => {
     };
 
 
-
-
-
-
     const [pageCount, setPageCount] = React.useState('7');
     const handleChangeSelect = (event: SelectChangeEvent) => {
         setPageCount(event.target.value as string);
     };
-
 
 
     const onChangePageCards = (event: React.ChangeEvent<unknown>, page: number) => {
@@ -114,10 +141,18 @@ export const PacksList = () => {
     }
 
 
-    useEffect(() => {
-        dispatch(getCardsTC(pageCount, currentPage, debounceMin, debounceMax))
-    }, [pageCount, currentPage, debounceMin, debounceMax, dispatch])
+    const showMyPacks = () => {
+        debugger
+        setId(user_id)
+    }
+    const showAllPacks = () => {
+        setId('')
+    }
 
+
+    useEffect(() => {
+        dispatch(getCardsTC(pageCount, currentPage, debounceMin, debounceMax, sortPacks, debouncedValueSearchField, id))
+    }, [pageCount, currentPage, debounceMin, debounceMax, dispatch, sortPacks, debouncedValueSearchField, id])
 
 
     return (
@@ -125,18 +160,15 @@ export const PacksList = () => {
             <div className={s.panelSelectionCards}>
                 <div className={s.titleFromSelectionCards}>Show packs cards</div>
                 <div className={s.buttonGroup}>
-                    <ButtonGroup disableElevation variant="contained" fullWidth size={'large'}>
-                        <Button>My</Button>
-                        <Button>All</Button>
-                    </ButtonGroup>
+                    <Button fullWidth onClick={showMyPacks} variant={id ? "contained" : 'outlined'}>My</Button>
+                    <Button fullWidth onClick={showAllPacks} variant={id ? "outlined" : 'contained'}>All</Button>
                 </div>
                 <div className={s.titleNumberOfCards}>Number of cards</div>
                 <div className={s.sliderCards}>
                     <Slider
                         getAriaLabel={() => 'Count cards'}
                         value={valueSlider}
-                        // min={minCards}
-                        // max={maxCards}
+                        max={max}
                         onChange={handleChangeRangeSlider}
                         valueLabelDisplay="on"
                         color="secondary"
@@ -148,7 +180,7 @@ export const PacksList = () => {
                 <div className={s.searchFieldWithButton}>
                     <Paper
                         component="div"
-                        sx={{p: '2px 4px', display: 'flex', alignItems: 'center', width: 500}}
+                        sx={{p: '2px 4px', display: 'flex', alignItems: 'center', width: 500, borderRadius: '25px'}}
                     >
                         <IconButton type="submit" sx={{p: '10px'}} aria-label="search">
                             <SearchIcon/>
@@ -161,7 +193,10 @@ export const PacksList = () => {
                             inputProps={{'aria-label': 'search'}}
                         />
                     </Paper>
-                    <button>Add new pack</button>
+                    <Fab variant="extended" color="secondary">
+                        <AddCardIcon sx={{mr: 1}}/>
+                        Add new Pack
+                    </Fab>
                 </div>
                 <div className={s.tableCards}>
                     <TableContainer component={Paper}>
@@ -170,9 +205,21 @@ export const PacksList = () => {
                                 <TableRow>
                                     <StyledTableCell>Name</StyledTableCell>
                                     <StyledTableCell align="right">Cards</StyledTableCell>
-                                    <StyledTableCell align="right">Last Updated</StyledTableCell>
+                                    <StyledTableCell align="right">
+                                        <IconButton size={'small'}
+                                                    className={sortPacks === '0updated' ? s.triangleUp : s.triangleDown}
+                                                    onClick={sortPacksHandler}>
+                                            <svg
+                                                className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+                                                focusable="false" aria-hidden="true" viewBox="0 0 24 24"
+                                                data-testid="ArrowDropDownIcon">
+                                                <path d="m7 10 5 5 5-5z"></path>
+                                            </svg>
+                                        </IconButton>
+                                        Last Updated
+                                    </StyledTableCell>
                                     <StyledTableCell align="right">Created by</StyledTableCell>
-                                    <StyledTableCell align="right">Actions</StyledTableCell>
+                                    <StyledTableCell align="center">Actions</StyledTableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
@@ -182,9 +229,34 @@ export const PacksList = () => {
                                             {row.name}
                                         </StyledTableCell>
                                         <StyledTableCell align="right">{row.cardsCount}</StyledTableCell>
-                                        <StyledTableCell align="right">{new Date(row.updated).toLocaleDateString()}</StyledTableCell>
+                                        <StyledTableCell
+                                            align="right">{new Date(row.updated).toLocaleDateString()}</StyledTableCell>
                                         <StyledTableCell align="right">{row.user_name}</StyledTableCell>
-                                        <StyledTableCell align="right">##########</StyledTableCell>
+                                        <StyledTableCell align="right">
+                                            {row.user_id === user_id ? <div style={{display: 'flex', flexWrap: 'nowrap', flexDirection: 'row', justifyContent: 'flex-end'}}>
+                                                <Fab title={'delete'}
+                                                     style={{width: '36px', height: '35px', margin: '0 2px'}}
+                                                     onClick={() => {deletePack(row._id)}}
+                                                     size={'small'} color="error" aria-label="delete">
+                                                    <DeleteIcon/>
+                                                </Fab>
+                                                <Fab title={'edit'}
+                                                     style={{width: '36px', height: '35px', margin: '0 2px'}}
+                                                     size={'small'} color="primary" aria-label="edit">
+                                                    <EditIcon/>
+                                                </Fab>
+                                                <Fab title={'learn'}
+                                                     style={{width: '36px', height: '35px', margin: '0 2px'}}
+                                                     color="primary" aria-label="learn">
+                                                    <MenuBookIcon/>
+                                                </Fab>
+                                            </div> : <Fab title={'learn'}
+                                                          style={{width: '36px', height: '35px', margin: '0 2px'}}
+                                                          color="primary" aria-label="learn">
+                                                <MenuBookIcon/>
+                                            </Fab>}
+
+                                        </StyledTableCell>
                                     </StyledTableRow>
                                 ))}
                             </TableBody>
@@ -221,3 +293,53 @@ export const PacksList = () => {
     );
 };
 
+
+
+
+
+
+
+
+
+
+/*export default function FormAddPack() {
+    const [open, setOpen] = React.useState(false);
+
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
+
+    return (
+        <div>
+            <Button variant="outlined" onClick={handleClickOpen}>
+                Open form dialog
+            </Button>
+            <Dialog open={open} onClose={handleClose}>
+                <DialogTitle>Subscribe</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        To subscribe to this website, please enter your email address here. We
+                        will send updates occasionally.
+                    </DialogContentText>
+                    <TextField
+                        autoFocus
+                        margin="dense"
+                        id="name"
+                        label="Email Address"
+                        type="email"
+                        fullWidth
+                        variant="standard"
+                    />
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClose}>Cancel</Button>
+                    <Button onClick={handleClose}>Subscribe</Button>
+                </DialogActions>
+            </Dialog>
+        </div>
+    );
+}*/

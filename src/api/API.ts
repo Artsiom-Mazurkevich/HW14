@@ -77,12 +77,15 @@ export const cardsAPI = {
 
 
     //========================3==========================
-    getTestCards (cardsCountOnPage: string, currentPage: number, min:number, max: number) {
+    getTestCards (cardsCountOnPage: string, currentPage: number, min:number, max: number, sortPacks: string, packName: string, user_id: string) {
         //return instance.get(`cards/pack?pageCount=${cardsCountOnPage}&page=${currentPage}&min=${min}&max=${max}`)
-        return instance.get(`cards/pack`, {params:{pageCount: cardsCountOnPage, page: currentPage, min, max}})
+        return instance.get(`cards/pack`, {params:{pageCount: cardsCountOnPage, page: currentPage, min, max, sortPacks, packName, user_id}})
     },
     createCard (name: string, deckCover: string, isPrivate: boolean) {
       return instance.post(`cards/pack`, {cardsPack: {name, deckCover, private: isPrivate}})
+    },
+    deleteCardsPack (id: string) {
+        return instance.delete(`cards/pack`, {params:{id}})
     }
     //========================3==========================
 

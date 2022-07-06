@@ -46,6 +46,7 @@ export const loginReducer = (state: LoginStateType = initialState, action: Login
         case "login/GET-USER": {
             return {
                 ...state,
+                _id: action.payload.data._id,
                 data: action.payload.data,
                 isAuth: action.payload.isAuth
             }

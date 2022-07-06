@@ -1,5 +1,7 @@
-import {ThunkType} from "../../bll/store";
+import {RootState, store, ThunkType} from "../../bll/store";
 import {cardsAPI} from "../../api/API";
+
+type SortPacksType = '0updated' | '1updated'
 
 
 export type CardType = {
@@ -30,6 +32,7 @@ type InitialStateType = {
     "maxCardsCount": number
     "token": string
     "tokenDeathTime": number
+    "sortPacks": SortPacksType
 }
 
 
@@ -40,9 +43,10 @@ const initialState: InitialStateType = {
     pageCount: 1,
     cardPacksTotalCount: 1,
     minCardsCount: 0,
-    maxCardsCount: 0,
+    maxCardsCount: 110,
     token: '',
     tokenDeathTime: 0,
+    sortPacks: '0updated',
 }
 
 
@@ -53,7 +57,6 @@ const initialState: InitialStateType = {
 export const packsListReducer = (state:InitialStateType = initialState, action: PacksListActionsType): InitialStateType => {
     switch (action.type) {
         case "SET-CARDS":
-            debugger
             return {...state,
                 cardPacks: action.responseGetCardsPack.cardPacks,
                 page: action.responseGetCardsPack.page,
@@ -68,13 +71,18 @@ export const packsListReducer = (state:InitialStateType = initialState, action: 
             return {...state,
                 page: action.page
             }
+        case "SORT-PACKS-BY-DATE":
+            return {...state,
+                sortPacks: action.sortPack
+            }
         default:
             return state
     }
 }
 
-const setCards = (responseGetCardsPack: InitialStateType) => ({type: 'SET-CARDS', responseGetCardsPack} as const)
+export const setCards = (responseGetCardsPack: InitialStateType) => ({type: 'SET-CARDS', responseGetCardsPack} as const)
 export const changePage = (page: number) => ({type: 'CHANGE-PAGE', page} as const)
+export const sortPacksByDate = (sortPack: SortPacksType) => ({type: 'SORT-PACKS-BY-DATE', sortPack} as const)
 
 //===========================1=============================
 /*export const getCardsTC = ():ThunkType => dispatch => {
@@ -96,11 +104,38 @@ export const filterCardsTC = (min: number, max: number, page: number = 1):ThunkT
 //===========================1=============================
 
 
-export const getCardsTC = (cardsCountOnPage: string, currentPage: number, min:number, max: number):ThunkType => dispatch => {
-    cardsAPI.getTestCards(cardsCountOnPage, currentPage, min, max).then(res => {
+export const getCardsTC =
+    (
+    cardsCountOnPage: string,
+    currentPage: number,
+    min:number,
+    max: number,
+    sortPacks: string = '0updated',
+    packName: string = '',
+    user_id: string = ''
+    ):ThunkType => dispatch =>
+    {
+    cardsAPI.getTestCards(cardsCountOnPage, currentPage, min, max, sortPacks, packName, user_id).then
+    (
+        res => {
         dispatch(setCards(res.data))
+        }
+    )
+}
+
+
+/*const {page, minCardsCount, maxCardsCount, sortPacks} = store.getState().packsList
+const pageCount = String(store.getState().packsList.pageCount)*/
+
+
+export const deleteCardsPackTC = (id: string):ThunkType => dispatch => {
+    const {page, minCardsCount, maxCardsCount, sortPacks} = store.getState().packsList
+    const pageCount = String(store.getState().packsList.pageCount)
+    cardsAPI.deleteCardsPack(id).then(res => {
+        dispatch(getCardsTC(pageCount, page, minCardsCount, maxCardsCount, sortPacks))
     })
 }
+
 
 
 export const createNewCardTC = (name: string, deckCover: string = '', isPrivate: boolean = false):ThunkType => dispatch => {
@@ -113,7 +148,9 @@ export const createNewCardTC = (name: string, deckCover: string = '', isPrivate:
 
 
 
-export type PacksListActionsType = ReturnType<typeof setCards> | ReturnType<typeof changePage>
+export type PacksListActionsType = ReturnType<typeof setCards>
+    | ReturnType<typeof changePage>
+    | ReturnType<typeof sortPacksByDate>
 
 
 
