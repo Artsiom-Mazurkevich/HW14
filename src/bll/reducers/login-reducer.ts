@@ -13,8 +13,8 @@ export type LoginResponseType = {
     name: string
     avatar?: string
     publicCardPacksCount: number
-    created: Date
-    updated: Date
+    created: string
+    updated: string
     isAdmin: boolean
     verified: boolean
     rememberMe: boolean
@@ -28,8 +28,8 @@ const initialState: LoginStateType = {
         name: "",
         avatar: "",
         publicCardPacksCount: 0,
-        created: new Date(),
-        updated: new Date(),
+        created: '',
+        updated: '',
         isAdmin: false,
         verified: false,
         rememberMe: false,
@@ -38,7 +38,7 @@ const initialState: LoginStateType = {
     isAuth: false
 }
 
-export type LoginActionType = ReturnType<typeof loginAC>
+export type LoginActionType = ReturnType<typeof loginAC> | ReturnType<typeof setIsAuthAC>
 
 export const loginReducer = (state: LoginStateType = initialState, action: LoginActionType) => {
     switch (action.type) {
@@ -47,6 +47,11 @@ export const loginReducer = (state: LoginStateType = initialState, action: Login
                 ...state,
                 data: action.payload.data,
                 isAuth: action.payload.isAuth
+            }
+        }
+        case 'Login/ISAUTH': {
+            return {
+                ...state, isAuth: action.payload.isAuth,
             }
         }
         default: {
@@ -64,6 +69,8 @@ export const loginAC = (data: LoginResponseType, isAuth: boolean) => {
         }
     } as const
 }
+
+export const setIsAuthAC = (isAuth: boolean) => ({type: 'Login/ISAUTH', payload: { isAuth }} as const);
 
 export const loginTC = (email: string, password: string, rememberMe: boolean): ThunkType => async dispatch => {
     dispatch(setLoadingStatus("loading"))

@@ -1,23 +1,28 @@
-import React, {ChangeEvent, useEffect, useState} from 'react';
+import React, {ChangeEvent, useState} from 'react';
+import {Navigate} from "react-router-dom";
 import s from '../Styles/Profile.module.css'
 import {useAppDispatch, useAppSelector} from "../bll/store";
-import {Navigate} from "react-router-dom";
+import {logoutTC, updateProfileTC} from "../bll/reducers/profile-reducer";
 import {TextField} from '@mui/material';
 import PhotoCameraOutlinedIcon from '@mui/icons-material/PhotoCameraOutlined';
+import LogoutIcon from '@mui/icons-material/Logout';
 import userPhoto from '../assets/images/user.png'
-import {setProfileTC, updateProfileTC} from "../bll/reducers/profile-reducer";
 
 export const Profile = () => {
-    const isAuth = useAppSelector(state => state.login.isAuth)
+
+    const isAuth = useAppSelector(state => state.login.isAuth);
+    const profile = useAppSelector(state => state.profile);
+
+
     const dispatch = useAppDispatch();
-    useEffect(() => {
-        dispatch(setProfileTC())
-    }, []);
-    const profile = useAppSelector(state => state.profile.data);
+
     const avatar = profile.avatar ? profile.avatar : userPhoto;
+
     const [editMode, setEditMode] = useState<boolean>(false);
     const [newName, setNewName] = useState<string>(profile.name);
     const [newAvatar, setNewAvatar] = useState<string>(avatar);
+
+    console.log(isAuth)
 
     const activateEditMode = () => {
         setEditMode(true);
@@ -40,15 +45,25 @@ export const Profile = () => {
         setEditMode(false);
     };
 
+    const logoutHandler = () => {
+        dispatch(logoutTC())
+    }
     if (!isAuth) {
-        return <Navigate to={"/login/"}/>
+        return <Navigate to={"/login"}/>
     }
 
     return !editMode
         ? <div className={s.profilePageContainer}>
             <div className={s.profileContainer}>
                 <div className={s.profileInfoContainer}>
-                    {/*<div className={s.avatar}></div>*/}
+                    <div className={s.logoutBtnContainer}>
+                        <div className={s.logoutContainer}>
+                            <button type='button' className={s.logoutBtn} onClick={logoutHandler} id='logoutBtn'/>
+                            <label htmlFor='logoutBtn' className={s.labelLogout}>
+                                <LogoutIcon/>
+                            </label>
+                        </div>
+                    </div>
                     <img src={avatar != null ? avatar : userPhoto}
                          className={s.avatar}
                          alt='avatar'/>
@@ -87,7 +102,8 @@ export const Profile = () => {
                 </div>
                 <div className={s.editButtonsContainer}>
                     <button className={s.editCancelBtn} onClick={disActivateEditMode}>Cancel</button>
-                    <button className={s.editSaveBtn} onClick={() => updateProfileData(newName, 'https://i.pinimg.com/564x/76/4d/59/764d59d32f61f0f91dec8c442ab052c5.jpg')}>Save
+                    <button className={s.editSaveBtn}
+                            onClick={() => updateProfileData(newName, '')}>Save
                     </button>
                 </div>
             </div>

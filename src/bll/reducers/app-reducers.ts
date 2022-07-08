@@ -1,6 +1,7 @@
 import {ThunkType} from "../store";
 import {authApi} from "../../api/API";
-import {loginAC} from "./login-reducer";
+import {setProfileAC} from "./profile-reducer";
+import userPhoto from '../../assets/images/user.png'
 
 export type LoadingStatusType = "idle" | "loading"
 
@@ -59,7 +60,14 @@ export const authMeTC = ():ThunkType => async dispatch =>{
         dispatch(setLoadingStatus("loading"))
     try{
         const response = await authApi.authMe()
-        dispatch(loginAC(response.data, true))
+        const user = response.data
+        if (!user.avatar) user.avatar = `${userPhoto}`
+        dispatch(setProfileAC({
+            id: user._id,
+            email: user.email,
+            name: user.name,
+            avatar: user.avatar
+        }))
     }catch (e:any){
         const error = e.response.data ? e.response.data.error : ('more' +
             ' details in the console');

@@ -1,73 +1,71 @@
 import {profileAPI} from "../../api/API";
 import {ThunkType} from "../store";
-
-export type ProfileStateType = {
-    data: ProfileType
-    isAuth: boolean
-}
+import {setIsAuthAC} from "./login-reducer";
 
 export type ResponseUpdateUser = {
-    token: string
-    tokenDeathTime: number
-    updatedUser: {
-        avatar?: string
-        created: Date
-        email: string
-        isAdmin: false
-        name: string
-        publicCardPacksCount: number
-        rememberMe: boolean
-        token: string
-        tokenDeathTime: number
-        updated: Date
-        verified: boolean
-        __v: number
-        _id: string
-    }
+    updatedUser: ProfileStateType,
+    error?: string
 }
 
-export type ProfileType = {
-    _id: string
+export type LogoutResponse = {
+    info: string
+    error: string
+}
+
+export type ProfilePayloadType = {
+    id: string
     email: string
     name: string
+    avatar: string
+}
+
+export type ProfileStateType = {
     avatar?: string
+    created: string
+    email: string
+    isAdmin: false
+    name: string
     publicCardPacksCount: number
-    created: Date
-    updated: Date
-    isAdmin: boolean
-    verified: boolean
     rememberMe: boolean
     token: string
-    tokenDeathTime: number,
-    __v: number,
+    tokenDeathTime: number
+    updated: string
+    verified: boolean
+    __v: number
+    _id: string
 }
 
 const initialState: ProfileStateType = {
-    data: {
         _id: '',
         email: '',
         name: '',
         avatar: '',
         publicCardPacksCount: 0,
-        created: new Date(),
-        updated: new Date(),
+        created: '',
+        updated: '',
         isAdmin: false,
         verified: false,
         rememberMe: false,
         token: '',
         tokenDeathTime: 0,
         __v: 0,
-    },
-    isAuth: false
 }
 
-export const profileReducer = (state: ProfileStateType = initialState, action: ProfileActionType) => {
+export type ProfileActionTypes = setProfileActionType | changeProfileDataActionType
+
+export const profileReducer = (state: ProfileStateType = initialState, action: ProfileActionTypes): ProfileStateType => {
     switch (action.type) {
-        case 'SET-PROFILE': {
+        case 'profile/SET-PROFILE': {
             return {
                 ...state,
-                data: action.profile
+                _id: action.payload.id,
+                email: action.payload.email,
+                name: action.payload.name,
+                avatar: action.payload.avatar
             }
+        }
+        case 'profile/CHANGE-PROFILE': {
+            return {...state, ...action.data}
         }
         default: {
             return state
@@ -76,22 +74,35 @@ export const profileReducer = (state: ProfileStateType = initialState, action: P
 }
 
 
-export type ProfileActionType = ReturnType<typeof setProfileAC>
+export const setProfileAC = (payload: ProfilePayloadType) => ({type: 'profile/SET-PROFILE', payload} as const)
+type setProfileActionType = ReturnType<typeof setProfileAC>
 
-export const setProfileAC = (profile: ProfileType) => ({type: 'SET-PROFILE', profile} as const);
+export const changeProfileDataAC = (data: ProfileStateType) => ({type: 'profile/CHANGE-PROFILE', data} as const)
+type changeProfileDataActionType = ReturnType<typeof changeProfileDataAC>
 
-export const setProfileTC = ():ThunkType => dispatch => {
-    profileAPI.getProfile()
-        .then(response => {
-            dispatch(setProfileAC(response.data))
-        })
-        .catch(error => {
-            alert(error)
-        })
+export const updateProfileTC = (name: string, avatar: string):ThunkType => async dispatch => {
+    try {
+        const res = await profileAPI.updateProfile(name, avatar)
+        dispatch(changeProfileDataAC(res.data.updatedUser))
+    }
+    catch (e) {
+        console.log(e)
+    }
 }
-export const updateProfileTC = (name: string, avatar: string):ThunkType => dispatch => {
-    profileAPI.updateProfile(name, avatar)
-        .then(response => {
-            dispatch(setProfileAC(response.data.updatedUser))
-        })
+export const logoutTC = ():ThunkType => async dispatch => {
+    try {
+        const res = await profileAPI.logout()
+        if (res.data.info) {
+            dispatch(setProfileAC({
+                id: '',
+                email: '',
+                name: '',
+                avatar: '',
+            }))
+            dispatch(setIsAuthAC(false))
+        }
+    }
+    catch (e) {
+        console.log(e)
+    }
 }

@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 import {useAppDispatch, useAppSelector} from "../../bll/store";
 import {loginTC} from "../../bll/reducers/login-reducer";
+import {Navigate} from "react-router-dom";
 
 type FormikErrorType = {
     email?: string
@@ -55,11 +56,11 @@ export const Login = () => {
         },
     });
     /*if (!isRegistered) {
-        return <Navigate to={"/registration/"}/>
+        return <Navigate to={"/registration/"}/>*/
 
     if (isAuth) {
         return <Navigate to={"/profile/"}/>
-    }}*/
+    }
 
     return (
         <div className={style.wrapper}>
@@ -102,7 +103,6 @@ export const Login = () => {
                 </form>
             </div>
         </div>
-
     );
 };
 // 1 студент: создание страницы логинизации: отправить запрос, показать ошибку или перейти на страницу профайла
