@@ -79,7 +79,6 @@ export const Profile = () => {
                         </div>
                     </div>
                 </div>
-
                 <div className={s.editInputsContainer}>
                     <TextField id="standard-helperText" label="Edit your name" defaultValue={profile.name}
                                variant="standard" onChange={changeTitle}/>
