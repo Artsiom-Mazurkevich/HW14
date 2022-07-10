@@ -1,6 +1,7 @@
 import {ThunkType} from "../store";
-import {authApi} from "../../api/API";
+import {authApi, ErrorType} from "../../api/API";
 import {setError, setLoadingStatus} from "./app-reducers";
+import {AxiosError} from "axios";
 
 type LoginStateType = {
     data: LoginResponseType
@@ -45,6 +46,7 @@ export const loginReducer = (state: LoginStateType = initialState, action: Login
         case "login/GET-USER": {
             return {
                 ...state,
+                _id: action.payload.data._id,
                 data: action.payload.data,
                 isAuth: action.payload.isAuth
             }
@@ -78,7 +80,7 @@ export const loginTC = (email: string, password: string, rememberMe: boolean): T
         const response = await authApi.login(email, password, rememberMe)
         dispatch(loginAC(response.data, true))
     } catch (e: any) {
-        const error = e.response ? e.response.data.error : (`${e.message}, more details in the console`);
+        const error = e.response ? e.response.data.error : ('error');
         console.log(error)
         dispatch(setError(error))
     } finally {

@@ -7,6 +7,8 @@ import {
 import {TypedUseSelectorHook, useDispatch, useSelector} from "react-redux";
 import {LoginActionType, loginReducer} from "./reducers/login-reducer";
 import {AppActionType, appReducers} from "./reducers/app-reducers";
+import {ProfileActionType, profileReducer} from "./reducers/profile-reducer";
+import {PacksListActionsType, packsListReducer} from "../Pages/Packs_List/packsList-reducer";
 import {ProfileActionTypes, profileReducer} from "./reducers/profile-reducer";
 
 const rootReducer = combineReducers({
@@ -14,6 +16,7 @@ const rootReducer = combineReducers({
     login: loginReducer,
     app: appReducers,
     profile: profileReducer,
+    packsList: packsListReducer
 })
 
 export const store = legacy_createStore(rootReducer, applyMiddleware(thunkMiddleWare));
@@ -29,6 +32,8 @@ export type AppRootActionsType =
     | ActionTypeAuthReducer
     | AppActionType
     | ProfileActionTypes
+    | ProfileActionType
+    | PacksListActionsType
 
 // @ts-ignore
 window.store = store;

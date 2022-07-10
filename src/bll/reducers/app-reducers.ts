@@ -69,8 +69,7 @@ export const authMeTC = ():ThunkType => async dispatch =>{
             avatar: user.avatar
         }))
     }catch (e:any){
-        const error = e.response.data ? e.response.data.error : ('more' +
-            ' details in the console');
+        const error = e.response.data ? e.response.data.error : ('error');
         // const error = e.response ? e.response.data.error : (e.message + ', more details in the console');
         console.log(error)
         dispatch(setError(error))

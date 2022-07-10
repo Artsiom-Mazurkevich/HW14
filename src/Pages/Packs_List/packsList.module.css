@@ -1,0 +1,98 @@
+.mainBlockPacksList {
+    width: 1200px;
+    min-height: 700px;
+    margin: 150px auto;
+    display: flex;
+    background-color: #FEFEFF;
+    border-radius: 8px;
+}
+
+.panelSelectionCards {
+    width: 30%;
+    background-color: #ECECF9;
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    padding: 33px 24px 0 24px;
+}
+
+.packsList {
+    display: flex;
+    flex-direction: column;
+    width: 70%;
+    padding: 24px 48px;
+}
+
+.titleFromSelectionCards {
+    color: #2D2E46;
+    font-weight: 600;
+    font-size: 1.2em;
+}
+
+.titleNumberOfCards {
+    composes: titleFromSelectionCards;
+    padding: 50px 0;
+}
+
+
+.buttonGroup {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    margin: 20px 0;
+}
+.buttonGroup button {
+    margin: 3px;
+}
+
+.sliderCards {
+    margin: 0 auto;
+    width: 90%;
+}
+
+.titlePacksList {
+    composes: titleFromSelectionCards;
+    font-size: 1.5em;
+}
+
+.searchFieldWithButton {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.tableCards {
+    margin-top: 25px;
+    width: 100%;
+    border-radius: 5px;
+}
+
+.pagination {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    height: 100%;
+    color: #2D2E46;
+    font-weight: 500;
+    padding: 10px 0;
+}
+
+
+.triangleUp {
+    transition: .3s;
+    rotate: 180deg;
+}
+
+.triangleDown {
+    transition: .3s;
+    rotate: 360deg;
+}
+
+
+.btnDeleteEditLearn {
+    width: 10px;
+    height: 10px;
+}
