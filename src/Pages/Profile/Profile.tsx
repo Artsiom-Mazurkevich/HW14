@@ -1,28 +1,27 @@
-import React, {ChangeEvent, useState} from 'react';
+import React, {ChangeEvent, useEffect, useState} from 'react';
 import {Navigate} from "react-router-dom";
-import s from '../Styles/Profile.module.css'
-import {useAppDispatch, useAppSelector} from "../bll/store";
-import {logoutTC, updateProfileTC} from "../bll/reducers/profile-reducer";
+import s from './Profile.module.css'
+import {useAppDispatch, useAppSelector} from "../../bll/store";
+import {logoutTC, updateProfileTC} from "../../bll/reducers/profile-reducer";
 import {TextField} from '@mui/material';
 import PhotoCameraOutlinedIcon from '@mui/icons-material/PhotoCameraOutlined';
 import LogoutIcon from '@mui/icons-material/Logout';
-import userPhoto from '../assets/images/user.png'
+import userPhoto from '../../assets/images/user.png'
+import {authMeTC} from "../../bll/reducers/app-reducers";
 
-export const Profile = () => {
-
+export const Profile = React.memo(() => {
     const isAuth = useAppSelector(state => state.login.isAuth);
     const profile = useAppSelector(state => state.profile);
-
-
     const dispatch = useAppDispatch();
 
     const avatar = profile.avatar ? profile.avatar : userPhoto;
-
     const [editMode, setEditMode] = useState<boolean>(false);
     const [newName, setNewName] = useState<string>(profile.name);
     const [newAvatar, setNewAvatar] = useState<string>(avatar);
 
-    console.log(isAuth)
+    useEffect(() => {
+        dispatch(authMeTC())
+    }, [dispatch, isAuth])
 
     const activateEditMode = () => {
         setEditMode(true);
@@ -108,5 +107,5 @@ export const Profile = () => {
                 </div>
             </div>
         </div>
-};
+})
 

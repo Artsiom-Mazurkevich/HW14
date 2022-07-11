@@ -2,15 +2,18 @@ import {ThunkType} from "../store";
 import {authApi} from "../../api/API";
 import {setProfileAC} from "./profile-reducer";
 import userPhoto from '../../assets/images/user.png'
+import {setIsAuthAC} from "./login-reducer";
 
 export type LoadingStatusType = "idle" | "loading"
 
 type InitialStateType = {
+    isAuth: boolean
     error: string | null
     loadingStatus: LoadingStatusType
     isInitialized: boolean
 }
 const initialState: InitialStateType = {
+    isAuth: false,
     error: null,
     loadingStatus: "idle",
     isInitialized: false,
@@ -26,9 +29,8 @@ export const appReducers = (state: InitialStateType = initialState, action: AppA
     switch (action.type) {
         case "app/SET-LOADING-STATUS":
             return {...state, loadingStatus: action.loadingStatus}
-        case "app/SET-INITIALIZED": {
+        case "app/SET-INITIALIZED":
             return {...state, isInitialized: action.isInitialized}
-        }
         case "app/SET-ERROR":
             return {...state, error: action.error}
         default:
@@ -56,9 +58,9 @@ export const setError = (error: string | null) => {
     } as const
 }
 
-export const authMeTC = ():ThunkType => async dispatch =>{
+export const authMeTC = ():ThunkType => async dispatch => {
+    try {
         dispatch(setLoadingStatus("loading"))
-    try{
         const response = await authApi.authMe()
         const user = response.data
         if (!user.avatar) user.avatar = `${userPhoto}`
@@ -68,13 +70,14 @@ export const authMeTC = ():ThunkType => async dispatch =>{
             name: user.name,
             avatar: user.avatar
         }))
-    }catch (e:any){
+        dispatch(setIsAuthAC(true))
+        dispatch(setLoadingStatus('idle'))
+    } catch (e:any){
         const error = e.response.data ? e.response.data.error : ('error');
         // const error = e.response ? e.response.data.error : (e.message + ', more details in the console');
         console.log(error)
-        dispatch(setError(error))
-    }finally {
-        dispatch(setLoadingStatus('idle'))
+        /*dispatch(setError(error))*/
+    } finally {
         dispatch(setInitialized(true))
     }
 }

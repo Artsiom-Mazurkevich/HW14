@@ -1,11 +1,7 @@
 import {profileAPI} from "../../api/API";
 import {ThunkType} from "../store";
 import {setIsAuthAC} from "./login-reducer";
-
-export type ResponseUpdateUser = {
-    updatedUser: ProfileStateType,
-    error?: string
-}
+import userPhoto from '../../assets/images/user.png'
 
 export type LogoutResponse = {
     info: string
@@ -20,7 +16,7 @@ export type ProfilePayloadType = {
 }
 
 export type ProfileStateType = {
-    avatar?: string
+    avatar: string
     created: string
     email: string
     isAdmin: false
@@ -33,32 +29,24 @@ export type ProfileStateType = {
     verified: boolean
     __v: number
     _id: string
+    error: string
 }
 
-const initialState: ProfileStateType = {
-        _id: '',
+const initialState: ProfilePayloadType = {
+        id: '',
         email: '',
         name: '',
         avatar: '',
-        publicCardPacksCount: 0,
-        created: '',
-        updated: '',
-        isAdmin: false,
-        verified: false,
-        rememberMe: false,
-        token: '',
-        tokenDeathTime: 0,
-        __v: 0,
 }
 
 export type ProfileActionTypes = setProfileActionType | changeProfileDataActionType
 
-export const profileReducer = (state: ProfileStateType = initialState, action: ProfileActionTypes): ProfileStateType => {
+export const profileReducer = (state: ProfilePayloadType = initialState, action: ProfileActionTypes): ProfilePayloadType => {
     switch (action.type) {
         case 'profile/SET-PROFILE': {
             return {
                 ...state,
-                _id: action.payload.id,
+                id: action.payload.id,
                 email: action.payload.email,
                 name: action.payload.name,
                 avatar: action.payload.avatar
@@ -73,7 +61,6 @@ export const profileReducer = (state: ProfileStateType = initialState, action: P
     }
 }
 
-
 export const setProfileAC = (payload: ProfilePayloadType) => ({type: 'profile/SET-PROFILE', payload} as const)
 type setProfileActionType = ReturnType<typeof setProfileAC>
 
@@ -83,7 +70,14 @@ type changeProfileDataActionType = ReturnType<typeof changeProfileDataAC>
 export const updateProfileTC = (name: string, avatar: string):ThunkType => async dispatch => {
     try {
         const res = await profileAPI.updateProfile(name, avatar)
-        dispatch(changeProfileDataAC(res.data.updatedUser))
+        const updatedUser = res.data.updatedUser
+        if (!updatedUser.avatar) updatedUser.avatar =`${userPhoto}`
+        dispatch(setProfileAC({
+            id: updatedUser._id,
+            email: updatedUser.email,
+            name: updatedUser.name,
+            avatar: updatedUser.avatar,
+        }))
     }
     catch (e) {
         console.log(e)

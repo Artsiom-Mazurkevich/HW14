@@ -1,8 +1,12 @@
 import axios, {AxiosResponse} from "axios";
-import {LoginResponseType} from "../bll/reducers/login-reducer";
 import {RegistrationResponseType} from "../bll/reducers/registration-reducer";
-import {LogoutResponse, ResponseUpdateUser} from "../bll/reducers/profile-reducer";
+import {LogoutResponse, ProfileStateType} from "../bll/reducers/profile-reducer";
+import {LoginParamsType} from "../bll/reducers/login-reducer";
 
+export type UpdatedProfileType = {
+    updatedUser: ProfileStateType,
+    error?: string
+}
 
 export type ErrorType = {
     error: string
@@ -14,33 +18,33 @@ export type ErrorType = {
 }
 
 export const instance = axios.create({
-    // baseURL: process.env.REACT_APP_BACK_URL || "http://localhost:7542/2.0/",
-    baseURL: "http://localhost:7542/2.0",
+    baseURL: process.env.REACT_APP_BACK_URL || "http://localhost:7542/2.0/",
+    /*baseURL: "http://localhost:7542/2.0",*/
     withCredentials: true,
 })
 
 
 export const authApi = {
     register(email: string, password: string) {
-        return instance.post<{}, AxiosResponse<RegistrationResponseType>>("/auth/register", {
+        return instance.post<AxiosResponse<RegistrationResponseType>>("/auth/register", {
             email,
             password
         })
     },
-    login(email: string, password: string, rememberMe: boolean) {
-        return instance.post<{}, AxiosResponse<LoginResponseType>>("/auth/login", {email, password,rememberMe})
+    login(values: LoginParamsType) {
+        return instance.post<AxiosResponse<ProfileStateType>>("/auth/login", values)
     },
     authMe(){
-        return instance.post<{}, AxiosResponse<LoginResponseType>>('/auth/me', {})
+        return instance.post<ProfileStateType>('/auth/me', {})
     },
 }
 
 export const profileAPI = {
     updateProfile(name: string, avatar: string) {
-        return instance.put<{}, AxiosResponse<ResponseUpdateUser>>("/auth/me", {name, avatar})
+        return instance.put<UpdatedProfileType>("/auth/me", {name, avatar})
     },
     logout() {
-        return instance.delete<{}, AxiosResponse<LogoutResponse>>("/auth/me")
+        return instance.delete<LogoutResponse>("/auth/me")
     }
 }
 

@@ -1,17 +1,24 @@
 import {ThunkType} from "../store";
-import {authApi, ErrorType} from "../../api/API";
+import {authApi} from "../../api/API";
 import {setError, setLoadingStatus} from "./app-reducers";
-import {AxiosError} from "axios";
+import {setProfileAC} from "./profile-reducer";
 
-type LoginStateType = {
-    data: LoginResponseType
+export type LoginStateType = {
+    data: LoginType
     isAuth: boolean
 }
 
-export type LoginResponseType = {
+export type LoginParamsType = {
+    email: string,
+    password: string,
+    rememberMe: boolean
+}
+
+export type LoginType = {
     _id: string
     email: string
     name: string
+    password: string
     avatar?: string
     publicCardPacksCount: number
     created: string
@@ -27,6 +34,7 @@ const initialState: LoginStateType = {
         _id: "",
         email: "",
         name: "",
+        password: "",
         avatar: "",
         publicCardPacksCount: 0,
         created: '',
@@ -34,23 +42,15 @@ const initialState: LoginStateType = {
         isAdmin: false,
         verified: false,
         rememberMe: false,
-        error: ""
+        error: "",
     },
     isAuth: false
 }
 
-export type LoginActionType = ReturnType<typeof loginAC> | ReturnType<typeof setIsAuthAC>
+export type LoginActionType = ReturnType<typeof setIsAuthAC>
 
 export const loginReducer = (state: LoginStateType = initialState, action: LoginActionType) => {
     switch (action.type) {
-        case "login/GET-USER": {
-            return {
-                ...state,
-                _id: action.payload.data._id,
-                data: action.payload.data,
-                isAuth: action.payload.isAuth
-            }
-        }
         case 'Login/ISAUTH': {
             return {
                 ...state, isAuth: action.payload.isAuth,
@@ -62,7 +62,7 @@ export const loginReducer = (state: LoginStateType = initialState, action: Login
     }
 }
 
-export const loginAC = (data: LoginResponseType, isAuth: boolean) => {
+/*export const loginAC = (data: ProfileStateType, isAuth: boolean) => {
     return {
         type: "login/GET-USER",
         payload: {
@@ -70,21 +70,26 @@ export const loginAC = (data: LoginResponseType, isAuth: boolean) => {
             isAuth
         }
     } as const
-}
+}*/
 
 export const setIsAuthAC = (isAuth: boolean) => ({type: 'Login/ISAUTH', payload: { isAuth }} as const);
 
-export const loginTC = (email: string, password: string, rememberMe: boolean): ThunkType => async dispatch => {
-    dispatch(setLoadingStatus("loading"))
+export const loginTC = (values: LoginParamsType): ThunkType => async dispatch => {
     try {
-        const response = await authApi.login(email, password, rememberMe)
-        dispatch(loginAC(response.data, true))
+        dispatch(setLoadingStatus("loading"))
+        const res = await authApi.login(values);
+        const user = res.data.data;
+        dispatch(setIsAuthAC(true))
+        dispatch(setProfileAC({
+            id: user._id,
+            email: user.email,
+            name: user.name,
+            avatar: user.avatar,
+        }))
     } catch (e: any) {
         const error = e.response ? e.response.data.error : ('error');
         console.log(error)
         dispatch(setError(error))
-    } finally {
-        dispatch(setLoadingStatus("idle"))
     }
 }
 

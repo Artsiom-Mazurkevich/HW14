@@ -54,7 +54,7 @@ const registerAC = (email: string, isRegistered: boolean) => ({
 export const registerTC = (email: string, password: string):ThunkType => (dispatch) => {
     authApi.register(email, password)
         .then(response => {
-           dispatch(registerAC(response.data.addedUser.email, true))
+           dispatch(registerAC(response.data.data.addedUser.email, true))
         })
         // .catch(response => console.log(response.response.data.error))
         .catch(response => alert(response.response.data.error))

@@ -2,7 +2,8 @@ import React from "react";
 import {useFormik} from "formik";
 import style from "./Login.module.css"
 import {
-    FormControl,
+    Checkbox,
+    FormControl, FormControlLabel,
     FormGroup,
     FormLabel,
     TextField
@@ -28,7 +29,6 @@ export const Login = () => {
 
     const dispatch = useAppDispatch()
     const isAuth = useAppSelector(state => state.login.isAuth)
-    const isRegistered = useAppSelector(state => state.auth.isRegistered)
 
     const formik = useFormik({
         initialValues: {
@@ -51,12 +51,10 @@ export const Login = () => {
             return errors;
         },
         onSubmit: values => {
-            dispatch(loginTC(values.email, values.password, values.rememberMe));
-            // alert(JSON.stringify(values, null, 2));
+            dispatch(loginTC(values));
+            formik.resetForm();
         },
     });
-    /*if (!isRegistered) {
-        return <Navigate to={"/registration/"}/>*/
 
     if (isAuth) {
         return <Navigate to={"/profile/"}/>
@@ -89,14 +87,26 @@ export const Login = () => {
                                 ? <div
                                     style={divError('255')}>{formik.errors.password}</div>
                                 : null}
-                            <span className={style.forgot_password}><a
-                                href="forgot">Forgot Password</a></span>
+                            {/*<Checkbox {...formik.getFieldProps("rememberMe")}>Запомнить меня</Checkbox>*/}
+                            <FormControlLabel
+                                control={
+                                <>
+                                <Checkbox value="remember" color="primary"/>
+                                    <span className={style.forgot_password}><a
+                                        href="/forgot">Forgot Password</a></span>
+                                </>
+                                }
+                                label="Remember me"
+                                {...formik.getFieldProps('rememberMe')}
+                            />
+                            {/*<span className={style.forgot_password}><a
+                                href="/forgot">Forgot Password</a></span>*/}
                             <button type={"submit"}
                                     className={style.btn}>Login
                             </button>
                             <span className={style.dont_account}>Dont have an account</span>
                             <span className={style.linkSignup}><a
-                                href="profile">Sign
+                                href="src/Pages/Profile/Profile">Sign
                                     up</a></span>
                         </FormGroup>
                     </FormControl>
