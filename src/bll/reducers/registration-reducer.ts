@@ -19,7 +19,6 @@ export type RegistrationResponseType = {
 type InitialStateType = {
     email: string
     isRegistered: boolean
-
 }
 
 

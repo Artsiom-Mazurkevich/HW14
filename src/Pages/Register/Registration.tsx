@@ -103,7 +103,6 @@ export const Registration = () => {
                                 <div style={divError('327')}>{formik.errors.confirmPassword}</div> : null}
 
                             <div className={s.groupButton}>
-                                <button className={s.btnCancel}>Cancel</button>
                                 {/*<Button type={'submit'}*/}
                                 {/*        variant={'contained'}*/}
                                 {/*        style={*/}

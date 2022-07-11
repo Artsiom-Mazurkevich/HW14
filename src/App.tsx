@@ -1,24 +1,32 @@
-import React from "react";
+import React, {useEffect} from "react";
 import "./App.css";
 import {Navigate, Route, Routes} from "react-router-dom";
 import {Header} from "./Pages/header/Header";
-import {Profile} from "./Pages/Profile/Profile";
 import {Login} from "./Pages/login/Login";
 import {Registration} from "./Pages/Register/Registration";
 import {Test} from "./Pages/Test";
 import {RecoveryPassword} from "./Pages/RecoveryPassword";
 import {ForgotPassword} from "./Pages/ForgotPassword";
+import {ErrorPages} from "./Pages/ErrorPages";
 import {PATH} from "./enum/path";
+import {useAppDispatch, useAppSelector} from "./bll/store";
+import {authMeTC} from "./bll/reducers/app-reducers";
+import {Loader} from "./Components/common/loader/Loader";
 import {ErrorSnackbar} from "./Components/common/errorBar/ErrorBar";
+import {PacksList} from "./Pages/Packs_List/PacksList";
+import {Profile} from "./Pages/Profile/Profile";
 
-export const App = React.memo(() => {
+function App() {
+    const dispatch = useAppDispatch()
+    const isInitialized = useAppSelector(state=>state.app.isInitialized)
 
-    /*const dispatch = useAppDispatch()
-    const isAuth = useAppSelector(state => state.login.isAuth)
+    useEffect(()=>{
+    dispatch(authMeTC())
+    },[])
 
-    useEffect(() => {
-        dispatch(authMeTC());
-    }, [dispatch, isAuth])*/
+    if(!isInitialized){
+        return <Loader/>
+    }
 
     return (
         <div className="app">
@@ -40,4 +48,6 @@ export const App = React.memo(() => {
             </div>
         </div>
     );
-})
+}
+
+export default App;

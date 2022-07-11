@@ -3,7 +3,6 @@ import s from './packsList.module.css'
 import {
     Button,
     Fab,
-    fabClasses,
     IconButton,
     InputBase,
     MenuItem,
@@ -22,7 +21,7 @@ import {
     TableRow
 } from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
-import {store, useAppDispatch, useAppSelector} from "../../bll/store";
+import {useAppDispatch, useAppSelector} from "../../bll/store";
 import {changePage, deleteCardsPackTC, getCardsTC, sortPacksByDate} from "./packsList-reducer";
 import {useDebounce} from "./hook/useDebounce";
 import AddCardIcon from '@mui/icons-material/AddCard';
@@ -41,7 +40,6 @@ const StyledTableCell = styled(TableCell)(({theme}) => ({
         fontSize: 14,
     },
 }));
-
 const StyledTableRow = styled(TableRow)(({theme}) => ({
     '&:nth-of-type(odd)': {
         backgroundColor: '#FFFFFF',
@@ -55,26 +53,6 @@ const StyledTableRow = styled(TableRow)(({theme}) => ({
     },
 }));
 
-
-/*function createData(
-    name: string,
-    calories: number,
-    fat: number,
-    carbs: number,
-    protein: number,
-) {
-    return {name, calories, fat, carbs, protein};
-}*/
-
-/*const rows = [
-    createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-    createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-    createData('Eclair', 262, 16.0, 24, 6.0),
-    createData('Cupcake', 305, 3.7, 67, 4.3),
-    createData('Gingerbread', 356, 16.0, 49, 3.9),
-    createData('Gingerbread', 356, 16.0, 49, 3.9),
-    createData('Gingerbread', 356, 16.0, 49, 3.9),
-];*/
 
 
 export const PacksList = () => {
@@ -226,7 +204,7 @@ export const PacksList = () => {
                                 {arrayCards.map((row) => (
                                     <StyledTableRow key={row._id}>
                                         <StyledTableCell component="th" scope="row">
-                                            {row.name}
+                                            {row.name.length > 20 ? '###' : row.name}
                                         </StyledTableCell>
                                         <StyledTableCell align="right">{row.cardsCount}</StyledTableCell>
                                         <StyledTableCell
@@ -292,104 +270,3 @@ export const PacksList = () => {
         </div>
     );
 };
-
-
-
-
-
-
-
-
-
-
-/*export default function FormAddPack() {
-    const [open, setOpen] = React.useState(false);
-
-    const handleClickOpen = () => {
-        setOpen(true);
-    };
-
-    const handleClose = () => {
-        setOpen(false);
-    };
-
-    return (
-        <div>
-            <Button variant="outlined" onClick={handleClickOpen}>
-                Open form dialog
-            </Button>
-            <Dialog open={open} onClose={handleClose}>
-                <DialogTitle>Subscribe</DialogTitle>
-                <DialogContent>
-                    <DialogContentText>
-                        To subscribe to this website, please enter your email address here. We
-                        will send updates occasionally.
-                    </DialogContentText>
-                    <TextField
-                        autoFocus
-                        margin="dense"
-                        id="name"
-                        label="Email Address"
-                        type="email"
-                        fullWidth
-                        variant="standard"
-                    />
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleClose}>Cancel</Button>
-                    <Button onClick={handleClose}>Subscribe</Button>
-                </DialogActions>
-            </Dialog>
-        </div>
-    );
-}*/
-
-
-
-
-
-
-
-
-
-/*export default function FormAddPack() {
-    const [open, setOpen] = React.useState(false);
-
-    const handleClickOpen = () => {
-        setOpen(true);
-    };
-
-    const handleClose = () => {
-        setOpen(false);
-    };
-
-    return (
-        <div>
-            <Button variant="outlined" onClick={handleClickOpen}>
-                Open form dialog
-            </Button>
-            <Dialog open={open} onClose={handleClose}>
-                <DialogTitle>Subscribe</DialogTitle>
-                <DialogContent>
-                    <DialogContentText>
-                        To subscribe to this website, please enter your email address here. We
-                        will send updates occasionally.
-                    </DialogContentText>
-                    <TextField
-                        autoFocus
-                        margin="dense"
-                        id="name"
-                        label="Email Address"
-                        type="email"
-                        fullWidth
-                        variant="standard"
-                    />
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleClose}>Cancel</Button>
-                    <Button onClick={handleClose}>Subscribe</Button>
-                </DialogActions>
-            </Dialog>
-        </div>
-    );
-}*/

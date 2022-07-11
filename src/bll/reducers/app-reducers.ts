@@ -1,19 +1,15 @@
 import {ThunkType} from "../store";
 import {authApi} from "../../api/API";
-import {setProfileAC} from "./profile-reducer";
-import userPhoto from '../../assets/images/user.png'
-import {setIsAuthAC} from "./login-reducer";
+import {loginAC} from "./login-reducer";
 
 export type LoadingStatusType = "idle" | "loading"
 
 type InitialStateType = {
-    isAuth: boolean
     error: string | null
     loadingStatus: LoadingStatusType
     isInitialized: boolean
 }
 const initialState: InitialStateType = {
-    isAuth: false,
     error: null,
     loadingStatus: "idle",
     isInitialized: false,
@@ -29,8 +25,9 @@ export const appReducers = (state: InitialStateType = initialState, action: AppA
     switch (action.type) {
         case "app/SET-LOADING-STATUS":
             return {...state, loadingStatus: action.loadingStatus}
-        case "app/SET-INITIALIZED":
+        case "app/SET-INITIALIZED": {
             return {...state, isInitialized: action.isInitialized}
+        }
         case "app/SET-ERROR":
             return {...state, error: action.error}
         default:
@@ -58,26 +55,18 @@ export const setError = (error: string | null) => {
     } as const
 }
 
-export const authMeTC = ():ThunkType => async dispatch => {
-    try {
+export const authMeTC = ():ThunkType => async dispatch =>{
         dispatch(setLoadingStatus("loading"))
+    try{
         const response = await authApi.authMe()
-        const user = response.data
-        if (!user.avatar) user.avatar = `${userPhoto}`
-        dispatch(setProfileAC({
-            id: user._id,
-            email: user.email,
-            name: user.name,
-            avatar: user.avatar
-        }))
-        dispatch(setIsAuthAC(true))
-        dispatch(setLoadingStatus('idle'))
-    } catch (e:any){
+        dispatch(loginAC(response.data, true))
+    }catch (e:any){
         const error = e.response.data ? e.response.data.error : ('error');
         // const error = e.response ? e.response.data.error : (e.message + ', more details in the console');
         console.log(error)
-        /*dispatch(setError(error))*/
-    } finally {
+        dispatch(setError(error))
+    }finally {
+        dispatch(setLoadingStatus('idle'))
         dispatch(setInitialized(true))
     }
 }

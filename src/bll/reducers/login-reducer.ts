@@ -1,28 +1,27 @@
 import {ThunkType} from "../store";
 import {authApi} from "../../api/API";
 import {setError, setLoadingStatus} from "./app-reducers";
-import {setProfileAC} from "./profile-reducer";
 
-export type LoginStateType = {
-    data: LoginType
-    isAuth: boolean
-}
 
 export type LoginParamsType = {
-    email: string,
-    password: string,
+    email: string
+    password: string
     rememberMe: boolean
 }
 
-export type LoginType = {
+type LoginStateType = {
+    data: LoginResponseType
+    isAuth: boolean
+}
+
+export type LoginResponseType = {
     _id: string
     email: string
     name: string
-    password: string
     avatar?: string
     publicCardPacksCount: number
-    created: string
-    updated: string
+    created: Date
+    updated: Date
     isAdmin: boolean
     verified: boolean
     rememberMe: boolean
@@ -34,26 +33,28 @@ const initialState: LoginStateType = {
         _id: "",
         email: "",
         name: "",
-        password: "",
         avatar: "",
         publicCardPacksCount: 0,
-        created: '',
-        updated: '',
+        created: new Date(),
+        updated: new Date(),
         isAdmin: false,
         verified: false,
         rememberMe: false,
-        error: "",
+        error: ""
     },
     isAuth: false
 }
 
-export type LoginActionType = ReturnType<typeof setIsAuthAC>
+export type LoginActionType = ReturnType<typeof loginAC>
 
 export const loginReducer = (state: LoginStateType = initialState, action: LoginActionType) => {
     switch (action.type) {
-        case 'Login/ISAUTH': {
+        case "login/GET-USER": {
             return {
-                ...state, isAuth: action.payload.isAuth,
+                ...state,
+                _id: action.payload.data._id,
+                data: action.payload.data,
+                isAuth: action.payload.isAuth
             }
         }
         default: {
@@ -62,7 +63,7 @@ export const loginReducer = (state: LoginStateType = initialState, action: Login
     }
 }
 
-/*export const loginAC = (data: ProfileStateType, isAuth: boolean) => {
+export const loginAC = (data: LoginResponseType, isAuth: boolean) => {
     return {
         type: "login/GET-USER",
         payload: {
@@ -70,26 +71,19 @@ export const loginReducer = (state: LoginStateType = initialState, action: Login
             isAuth
         }
     } as const
-}*/
-
-export const setIsAuthAC = (isAuth: boolean) => ({type: 'Login/ISAUTH', payload: { isAuth }} as const);
+}
 
 export const loginTC = (values: LoginParamsType): ThunkType => async dispatch => {
+    dispatch(setLoadingStatus("loading"))
     try {
-        dispatch(setLoadingStatus("loading"))
-        const res = await authApi.login(values);
-        const user = res.data.data;
-        dispatch(setIsAuthAC(true))
-        dispatch(setProfileAC({
-            id: user._id,
-            email: user.email,
-            name: user.name,
-            avatar: user.avatar,
-        }))
+        const response = await authApi.login(values)
+        dispatch(loginAC(response.data, true))
     } catch (e: any) {
         const error = e.response ? e.response.data.error : ('error');
         console.log(error)
         dispatch(setError(error))
+    } finally {
+        dispatch(setLoadingStatus("idle"))
     }
 }
 

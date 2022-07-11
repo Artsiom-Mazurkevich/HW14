@@ -1,6 +1,6 @@
 import {profileAPI} from "../../api/API";
 import {ThunkType} from "../store";
-import {setIsAuthAC} from "./login-reducer";
+// import {setIsAuthAC} from "./login-reducer";
 import userPhoto from '../../assets/images/user.png'
 
 export type LogoutResponse = {
@@ -93,7 +93,7 @@ export const logoutTC = ():ThunkType => async dispatch => {
                 name: '',
                 avatar: '',
             }))
-            dispatch(setIsAuthAC(false))
+            // dispatch(setIsAuthAC(false))
         }
     }
     catch (e) {

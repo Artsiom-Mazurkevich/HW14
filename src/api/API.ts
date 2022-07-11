@@ -32,7 +32,7 @@ export const authApi = {
         })
     },
     login(values: LoginParamsType) {
-        return instance.post<AxiosResponse<ProfileStateType>>("/auth/login", values)
+        return instance.post("/auth/login", values)
     },
     authMe(){
         return instance.post<ProfileStateType>('/auth/me', {})
