@@ -18,6 +18,8 @@ type FormikErrorType = {
 }
 
 export const Login = () => {
+
+
     const divError = (top: string) => ({
         width: "100%",
         color: "red",
@@ -28,7 +30,7 @@ export const Login = () => {
     } as {})
 
     const dispatch = useAppDispatch()
-    const isAuth = useAppSelector(state => state.login.isAuth)
+    const isInitialized = useAppSelector(state => state.app.isInitialized)
 
     const formik = useFormik({
         initialValues: {
@@ -56,9 +58,10 @@ export const Login = () => {
         },
     });
 
-    // if (isAuth) {
-    //     return <Navigate to={"/profile/"}/>
-    // }
+    if (isInitialized) {
+        return <Navigate to={"/profile/"}/>
+    }
+
 
     return (
         <div className={style.wrapper}>

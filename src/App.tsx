@@ -1,6 +1,6 @@
 import React, {useEffect} from "react";
 import "./App.css";
-import {Navigate, Route, Routes} from "react-router-dom";
+import {Navigate, Route, Routes, useNavigate} from "react-router-dom";
 import {Header} from "./Pages/header/Header";
 import {Login} from "./Pages/login/Login";
 import {Registration} from "./Pages/Register/Registration";
@@ -19,13 +19,14 @@ import {Profile} from "./Pages/Profile/Profile";
 function App() {
     const dispatch = useAppDispatch()
     const isInitialized = useAppSelector(state=>state.app.isInitialized)
+    const navigate = useNavigate()
 
     useEffect(()=>{
     dispatch(authMeTC())
     },[])
 
     if(!isInitialized){
-        return <Loader/>
+        navigate('/login')
     }
 
     return (

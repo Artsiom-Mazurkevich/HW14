@@ -2,7 +2,7 @@ import {ThunkType} from "../store";
 import {authApi} from "../../api/API";
 import {loginAC} from "./login-reducer";
 
-export type LoadingStatusType = "idle" | "loading"
+export type LoadingStatusType = "idle" | "loading" | "successful" | "failed"
 
 type InitialStateType = {
     error: string | null
@@ -13,7 +13,6 @@ const initialState: InitialStateType = {
     error: null,
     loadingStatus: "idle",
     isInitialized: false,
-
 }
 
 export type AppActionType =
@@ -55,18 +54,18 @@ export const setError = (error: string | null) => {
     } as const
 }
 
-export const authMeTC = ():ThunkType => async dispatch =>{
+export const authMeTC = ():ThunkType => async dispatch => {
         dispatch(setLoadingStatus("loading"))
     try{
         const response = await authApi.authMe()
-        dispatch(loginAC(response.data, true))
+        dispatch(setInitialized(true))
+        dispatch(setLoadingStatus('successful'))
     }catch (e:any){
         const error = e.response.data ? e.response.data.error : ('error');
         // const error = e.response ? e.response.data.error : (e.message + ', more details in the console');
-        console.log(error)
-        dispatch(setError(error))
+        dispatch(setLoadingStatus('failed'))
+        // dispatch(setError(error))
     }finally {
         dispatch(setLoadingStatus('idle'))
-        dispatch(setInitialized(true))
     }
 }
