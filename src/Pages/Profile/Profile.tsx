@@ -10,7 +10,7 @@ import userPhoto from '../../assets/images/user.png'
 import {authMeTC} from "../../bll/reducers/app-reducers";
 
 export const Profile = React.memo(() => {
-    const isAuth = useAppSelector(state => state.login.isAuth);
+    // const isAuth = useAppSelector(state => state.login.isAuth);
     const profile = useAppSelector(state => state.profile);
     const dispatch = useAppDispatch();
 
@@ -19,9 +19,9 @@ export const Profile = React.memo(() => {
     const [newName, setNewName] = useState<string>(profile.name);
     const [newAvatar, setNewAvatar] = useState<string>(avatar);
 
-    useEffect(() => {
-        dispatch(authMeTC())
-    }, [dispatch, isAuth])
+    // useEffect(() => {
+    //     dispatch(authMeTC())
+    // }, [dispatch, isAuth])
 
     const activateEditMode = () => {
         setEditMode(true);
@@ -47,9 +47,9 @@ export const Profile = React.memo(() => {
     const logoutHandler = () => {
         dispatch(logoutTC())
     }
-    if (!isAuth) {
-        return <Navigate to={"/login"}/>
-    }
+    // if (!isAuth) {
+    //     return <Navigate to={"/login"}/>
+    // }
 
     return !editMode
         ? <div className={s.profilePageContainer}>

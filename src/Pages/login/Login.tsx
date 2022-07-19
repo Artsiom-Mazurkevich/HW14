@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {useFormik} from "formik";
 import style from "./Login.module.css"
 import {
@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import {useAppDispatch, useAppSelector} from "../../bll/store";
 import {loginTC} from "../../bll/reducers/login-reducer";
-import {Navigate} from "react-router-dom";
+import {Navigate, useNavigate} from "react-router-dom";
 
 type FormikErrorType = {
     email?: string
@@ -18,6 +18,7 @@ type FormikErrorType = {
 }
 
 export const Login = () => {
+    const navigate = useNavigate();
 
 
     const divError = (top: string) => ({
@@ -58,6 +59,11 @@ export const Login = () => {
         },
     });
 
+    // useEffect(() => {
+    //     if (isInitialized) {
+    //         return navigate('/profile')
+    //     }
+    // }, [])
     if (isInitialized) {
         return <Navigate to={"/profile/"}/>
     }

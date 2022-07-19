@@ -1,7 +1,7 @@
-import React, {ChangeEvent, useEffect} from 'react';
+import React, {ChangeEvent, Dispatch, SetStateAction, useEffect} from 'react';
 import s from './packsList.module.css'
 import {
-    Button,
+    Button, Checkbox, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle,
     Fab,
     IconButton,
     InputBase,
@@ -18,7 +18,7 @@ import {
     tableCellClasses,
     TableContainer,
     TableHead,
-    TableRow
+    TableRow, TextField
 } from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
 import {useAppDispatch, useAppSelector} from "../../bll/store";
@@ -128,6 +128,13 @@ export const PacksList = () => {
     }
 
 
+
+
+
+
+
+
+
     useEffect(() => {
         dispatch(getCardsTC(pageCount, currentPage, debounceMin, debounceMax, sortPacks, debouncedValueSearchField, id))
     }, [pageCount, currentPage, debounceMin, debounceMax, dispatch, sortPacks, debouncedValueSearchField, id])
@@ -171,7 +178,7 @@ export const PacksList = () => {
                             inputProps={{'aria-label': 'search'}}
                         />
                     </Paper>
-                    <Fab variant="extended" color="secondary">
+                    <Fab variant="extended" color="secondary" onClick={() => {}}>
                         <AddCardIcon sx={{mr: 1}}/>
                         Add new Pack
                     </Fab>
@@ -267,6 +274,67 @@ export const PacksList = () => {
                     </div>
                 </div>
             </div>
+            <ModalWindowCreatingPack/>
+        </div>
+    );
+};
+
+
+
+
+
+
+
+
+const ModalWindowCreatingPack = () => {
+    const [isOpenModal, setIsOpenModal] = React.useState(false);
+
+
+    const handleClickOpen = () => {
+        setIsOpenModal(true);
+    };
+
+    const handleClose = () => {
+        setIsOpenModal(false);
+    };
+
+    return (
+        <div>
+            <Fab variant="extended" color="secondary" onClick={handleClickOpen}>
+                <AddCardIcon sx={{mr: 1}}/>
+                Add new Pack
+            </Fab>
+            {/*<Button variant="outlined" onClick={handleClickOpen}>*/}
+            {/*    Add New Pack*/}
+            {/*</Button>*/}
+            <Dialog open={isOpenModal} onClose={handleClose}  fullWidth>
+                <DialogTitle>Add New Pack</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        Enter a title for your pack.
+                    </DialogContentText>
+                    <div style={{display: 'flex', flexDirection: 'row', alignItems: 'end'}}>
+                        <TextField
+                            fullWidth
+                            autoFocus
+                            required
+                            margin="dense"
+                            id="pack"
+                            label="Title Pack"
+                            type="text"
+                            variant="standard"
+                        />
+                        <Checkbox
+                            checked={true}
+                            inputProps={{'aria-label': 'controlled'}}
+                        />
+                    </div>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClose}>Back</Button>
+                    <Button onClick={handleClose}>Create</Button>
+                </DialogActions>
+            </Dialog>
         </div>
     );
 };

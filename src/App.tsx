@@ -7,13 +7,10 @@ import {Registration} from "./Pages/Register/Registration";
 import {Test} from "./Pages/Test";
 import {RecoveryPassword} from "./Pages/RecoveryPassword";
 import {ForgotPassword} from "./Pages/ForgotPassword";
-import {ErrorPages} from "./Pages/ErrorPages";
 import {PATH} from "./enum/path";
 import {useAppDispatch, useAppSelector} from "./bll/store";
 import {authMeTC} from "./bll/reducers/app-reducers";
-import {Loader} from "./Components/common/loader/Loader";
 import {ErrorSnackbar} from "./Components/common/errorBar/ErrorBar";
-import {PacksList} from "./Pages/Packs_List/PacksList";
 import {Profile} from "./Pages/Profile/Profile";
 
 function App() {
@@ -23,11 +20,14 @@ function App() {
 
     useEffect(()=>{
     dispatch(authMeTC())
+        if(!isInitialized){
+            navigate('/login')
+        }
     },[])
 
-    if(!isInitialized){
-        navigate('/login')
-    }
+    // if(!isInitialized){
+    //     navigate('/login')
+    // }
 
     return (
         <div className="app">

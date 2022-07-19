@@ -69,3 +69,5 @@ export const authMeTC = ():ThunkType => async dispatch => {
         dispatch(setLoadingStatus('idle'))
     }
 }
+
+
