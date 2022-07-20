@@ -28,6 +28,8 @@ import AddCardIcon from '@mui/icons-material/AddCard';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
+import {useFormik} from "formik";
+import {loginTC} from "../../bll/reducers/login-reducer";
 
 
 const StyledTableCell = styled(TableCell)(({theme}) => ({
@@ -54,7 +56,6 @@ const StyledTableRow = styled(TableRow)(({theme}) => ({
 }));
 
 
-
 export const PacksList = () => {
 
     const dispatch = useAppDispatch()
@@ -71,16 +72,9 @@ export const PacksList = () => {
     // console.log(store.getState())
 
 
-
-
-
-    
     const deletePack = (idPack: string) => {
-      dispatch(deleteCardsPackTC(idPack))
+        dispatch(deleteCardsPackTC(idPack))
     }
-    
-
-
 
 
     const [id, setId] = React.useState<string>('')
@@ -128,13 +122,6 @@ export const PacksList = () => {
     }
 
 
-
-
-
-
-
-
-
     useEffect(() => {
         dispatch(getCardsTC(pageCount, currentPage, debounceMin, debounceMax, sortPacks, debouncedValueSearchField, id))
     }, [pageCount, currentPage, debounceMin, debounceMax, dispatch, sortPacks, debouncedValueSearchField, id])
@@ -178,10 +165,11 @@ export const PacksList = () => {
                             inputProps={{'aria-label': 'search'}}
                         />
                     </Paper>
-                    <Fab variant="extended" color="secondary" onClick={() => {}}>
-                        <AddCardIcon sx={{mr: 1}}/>
-                        Add new Pack
-                    </Fab>
+                    <ModalWindowCreatingPack/>
+                    {/*<Fab variant="extended" color="secondary" onClick={() => {}}>*/}
+                    {/*    <AddCardIcon sx={{mr: 1}}/>*/}
+                    {/*    Add new Pack*/}
+                    {/*</Fab>*/}
                 </div>
                 <div className={s.tableCards}>
                     <TableContainer component={Paper}>
@@ -218,10 +206,17 @@ export const PacksList = () => {
                                             align="right">{new Date(row.updated).toLocaleDateString()}</StyledTableCell>
                                         <StyledTableCell align="right">{row.user_name}</StyledTableCell>
                                         <StyledTableCell align="right">
-                                            {row.user_id === user_id ? <div style={{display: 'flex', flexWrap: 'nowrap', flexDirection: 'row', justifyContent: 'flex-end'}}>
+                                            {row.user_id === user_id ? <div style={{
+                                                display: 'flex',
+                                                flexWrap: 'nowrap',
+                                                flexDirection: 'row',
+                                                justifyContent: 'flex-end'
+                                            }}>
                                                 <Fab title={'delete'}
                                                      style={{width: '36px', height: '35px', margin: '0 2px'}}
-                                                     onClick={() => {deletePack(row._id)}}
+                                                     onClick={() => {
+                                                         deletePack(row._id)
+                                                     }}
                                                      size={'small'} color="error" aria-label="delete">
                                                     <DeleteIcon/>
                                                 </Fab>
@@ -274,28 +269,40 @@ export const PacksList = () => {
                     </div>
                 </div>
             </div>
-            <ModalWindowCreatingPack/>
         </div>
     );
 };
 
 
-
-
-
-
+export type AddNewPackType = {
+    title?: string
+    isPrivate?: boolean
+    errorTextField?: boolean
+}
 
 
 const ModalWindowCreatingPack = () => {
     const [isOpenModal, setIsOpenModal] = React.useState(false);
+    const [textField, setTextField] = React.useState('')
+    const [checked, setChecked] = React.useState(false);
 
+
+    const handleChangeTextField = (e: ChangeEvent<HTMLInputElement>) => {
+        setTextField(e.currentTarget.value)
+
+    }
 
     const handleClickOpen = () => {
         setIsOpenModal(true);
     };
 
-    const handleClose = () => {
-        setIsOpenModal(false);
+    const handleCloseModal = () => {
+        setIsOpenModal(false)
+    }
+
+
+    const handleCreatePack = () => {
+        console.log({titlePack: textField, isPrivate: checked})
     };
 
     return (
@@ -307,15 +314,20 @@ const ModalWindowCreatingPack = () => {
             {/*<Button variant="outlined" onClick={handleClickOpen}>*/}
             {/*    Add New Pack*/}
             {/*</Button>*/}
-            <Dialog open={isOpenModal} onClose={handleClose}  fullWidth>
+            <Dialog open={isOpenModal} onClose={handleCloseModal} fullWidth>
                 <DialogTitle>Add New Pack</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
                         Enter a title for your pack.
                     </DialogContentText>
-                    <div style={{display: 'flex', flexDirection: 'row', alignItems: 'end'}}>
+                    <div style={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        justifyContent: 'space-between'
+                    }}>
                         <TextField
-                            fullWidth
+                            style={{width: '80%'}}
                             autoFocus
                             required
                             margin="dense"
@@ -323,16 +335,23 @@ const ModalWindowCreatingPack = () => {
                             label="Title Pack"
                             type="text"
                             variant="standard"
+                            error={textField.trim().length === 0}
+                            value={textField}
+                            onChange={handleChangeTextField}
+                            helperText={'This field must not be empty'}
                         />
-                        <Checkbox
-                            checked={true}
-                            inputProps={{'aria-label': 'controlled'}}
-                        />
+                        <div style={{display: 'flex', alignItems: 'end'}}>Private
+                            <Checkbox
+                                checked={checked}
+                                onChange={(e) => setChecked(e.currentTarget.checked)}
+                                style={{padding: '0 0 0 5px'}}
+                            />
+                        </div>
                     </div>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClose}>Back</Button>
-                    <Button onClick={handleClose}>Create</Button>
+                    <Button onClick={handleCloseModal} variant={'outlined'}>Back</Button>
+                    <Button onClick={handleCreatePack} variant={'contained'} disabled={textField.trim().length === 0}>Create</Button>
                 </DialogActions>
             </Dialog>
         </div>
